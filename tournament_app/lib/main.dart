@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'Ui//home.dart';
+import 'Ui/username_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
        theme: ThemeData.dark(),
       debugShowCheckedModeBanner: false,
-      home: Home(),
+      home: UsernameScreen(),
     );
   }
 }
