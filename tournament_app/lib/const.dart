@@ -7,3 +7,20 @@ const Color cardColor = Color(0xff55554E);
 const Color adminContainerColor = Color(0xff6C9092);
 const Color dateTimePickerColor = Color(0xff7A4C5C);
 const Color adminPanalTextColor = Color(0xffD2F5F4);
+
+// TextField Input Decoractions
+final InputDecoration inputDecoration = InputDecoration(
+  errorBorder: OutlineInputBorder(
+    borderRadius: BorderRadius.circular(44),
+    borderSide: BorderSide(color: Colors.red, width: 2),
+  ),
+  enabledBorder: OutlineInputBorder(
+    borderRadius: BorderRadius.circular(44),
+    borderSide: BorderSide(color: Colors.white, width: 2),
+  ),
+  border: OutlineInputBorder(
+    borderRadius: BorderRadius.circular(44),
+  ),
+  hintText: 'Enter Your PUBG Username',
+  labelText: 'PUBG Username',
+);

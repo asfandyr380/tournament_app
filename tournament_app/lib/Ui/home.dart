@@ -6,6 +6,9 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backgorundColor,
+      body: Column(
+        children: <Widget>[]
+      ),
     );
   }
 }
