@@ -3,19 +3,24 @@ import '../../const.dart';
 
 class CustomButton extends StatelessWidget {
 
-  CustomButton({this.onPressed});
+  CustomButton({this.onPressed, this.height, this.width, this.lable, this.margin});
   final Function onPressed;
+  final double width;
+  final double height;
+  final String lable;
+  final EdgeInsetsGeometry margin;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-        width: 116,
-        height: 28,
+        width: width != null ? width: 116,
+        height: height != null ? height: 28,
         padding: EdgeInsets.only(left: 30),
+        margin: margin,
         child: Text(
-          'Save',
+          lable,
           style: TextStyle(fontSize: 23),
         ),
         decoration: BoxDecoration(

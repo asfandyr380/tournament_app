@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tournament_app/Ui/details_Screen.dart';
 import 'Ui/username_screen.dart';
 
 void main() {

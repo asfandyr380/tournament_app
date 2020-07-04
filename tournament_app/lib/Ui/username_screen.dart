@@ -43,6 +43,7 @@ class _UsernameScreenState extends State<UsernameScreen> {
             ),
           ),
           CustomButton(
+            lable: 'Save',
             onPressed: () {
               setState(() {
                 isNotEmpty = true;

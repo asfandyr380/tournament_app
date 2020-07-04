@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
+import 'package:tournament_app/Ui/Widgets/custom_Button.dart';
 import 'package:tournament_app/const.dart';
 import 'package:http/http.dart' as http;
 import 'package:tournament_app/Models/tournament_model.dart';
-
 import 'details_Screen.dart';
 
 List<Tournament> list = [];
@@ -14,7 +15,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
   Future<List<Tournament>> getTournament() async {
     var res = await http.get('http://192.168.10.6:3000/tournaments');
     var jsondata = json.decode(res.body);
@@ -55,15 +55,22 @@ class _HomeState extends State<Home> {
                   itemCount: list.length,
                   itemBuilder: (context, i) {
                     return getTournamentDetails(
-                        list[i].title,
-                        list[i].time,
-                        list[i].roomID,
-                        list[i].roomPass,
-                        list[i].joined,
-                        list[i].date,
-                        list[i].map,
-                        list[i].type,
-                        context);
+                      list[i].title,
+                      list[i].time,
+                      list[i].joined,
+                      list[i].date,
+                      list[i].map,
+                      list[i].type,
+                      context,
+                      () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return DetailsScreen(
+                            tournamentinfo: list[i],
+                          );
+                        }));
+                      },
+                    );
                   }),
             ),
           ]),
@@ -71,25 +78,11 @@ class _HomeState extends State<Home> {
   }
 }
 
-Widget getTournamentDetails(
-  String title,
-  String time,
-  String roomId,
-  String roomPass,
-  int joined,
-  String date,
-  String map,
-  String type,
-  BuildContext ctx
-) {
+Widget getTournamentDetails(String title, String time, int joined, String date,
+    String map, String type, BuildContext ctx, onPressed) {
   return GestureDetector(
-    onTap: (){
-      Navigator.push(ctx, MaterialPageRoute(builder: (context){
-        return
-        DetailsScreen();
-      }));
-    },
-      child: Container(
+    onTap: onPressed,
+    child: Container(
       width: 346,
       height: 274,
       margin: EdgeInsets.only(left: 10, right: 10, top: 40),
@@ -179,6 +172,28 @@ Widget getTournamentDetails(
                 style: TextStyle(
                   fontSize: 16,
                 ),
+              ),
+            ],
+          ),
+          Row(
+            children: <Widget>[
+              Container(
+                width: 250,
+                margin: EdgeInsets.only(top: 30, left: 10),
+                child: Expanded(
+                  child: FAProgressBar(
+                    displayText: ' Joined',
+                    size: 20,
+                    progressColor: buttonColor,
+                    maxValue: 100,
+                    currentValue: joined,
+                  ),
+                ),
+              ),
+              CustomButton(
+                width: 100,
+                lable: 'Join',
+                margin: EdgeInsets.only(left: 20, top: 25),
               ),
             ],
           ),
