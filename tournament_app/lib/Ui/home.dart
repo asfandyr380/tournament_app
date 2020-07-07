@@ -15,8 +15,9 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  
   Future<List<Tournament>> getTournament() async {
-    var res = await http.get('http://192.168.10.6:3000/tournaments');
+    var res = await http.get('http://192.168.10.8:3000/tournaments');
     var jsondata = json.decode(res.body);
 
     for (var data in jsondata) {

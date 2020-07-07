@@ -6,7 +6,7 @@ import 'Widgets/tile.dart';
 
 class DetailsScreen extends StatelessWidget {
 
-  Tournament tournamentinfo;
+  final Tournament tournamentinfo;
 
   DetailsScreen({this.tournamentinfo});
 
