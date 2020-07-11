@@ -1,26 +1,39 @@
 import 'dart:convert';
-import 'package:tournament_app/Models/tournament_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:tournament_app/Models/pubgUser.dart';
+import 'package:tournament_app/Ui/username_screen.dart';
 
-List<Tournament> list = [];
+// Update the Joined Player Count
 
-Future<List<Tournament>> getTournament() async {
-  var res = await http.get('http://192.168.10.6:3000/tournaments');
-  var jsondata = json.decode(res.body);
+Future<void> updateJoin(var join, String id) async {
+  var header = {'Content-Type': 'application/json; charset=UTF-8'};
+  var body = {
+    "joined": join,
+  };
+  http.Response res = await http.patch(
+      'http://192.168.10.3:3000/tournaments/updateOne/$id',
+      headers: header,
+      body: json.encode(body));
+  print(res.body);
+}
 
-  for (var data in jsondata) {
-    Tournament info = Tournament(
-        date: data['date'],
-        time: data['time'],
-        roomID: data['roomId'],
-        roomPass: data['roomPass'],
-        joined: data['joined'],
-        map: data['mapType'],
-        title: data['title'],
-        type: data['type']);
-        
-    list.add(info);
+// Save The New User
+
+Future<User> saveUser(String text) async {
+  String url = 'http://192.168.10.3:3000/user';
+  var header = {'Content-Type': 'application/json; charset=UTF-8'};
+  var body = {
+    'PubgUsername': text,
+  };
+  http.Response res =
+      await http.post(url, headers: header, body: json.encode(body));
+  var jbody = json.decode(res.body);
+
+  for (var jdata in jbody) {
+    User newUser = User(
+      id: jdata['_id'],
+      username: jdata['PubgUsername'],
+      date: jdata['Date'],
+    );
   }
-  print(list.length);
-  return list;
 }

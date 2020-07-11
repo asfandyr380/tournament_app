@@ -1,13 +1,15 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:tournament_app/Models/pubgUser.dart';
+import 'package:tournament_app/Services/network.dart';
 import 'package:tournament_app/Ui/admin_panal.dart';
 import 'package:tournament_app/const.dart';
 import 'Widgets/custom_Button.dart';
 import 'home.dart';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
+
 final TextEditingController _controller = TextEditingController();
+List<User> users = [];
 
 class UsernameScreen extends StatefulWidget {
   @override
@@ -15,26 +17,15 @@ class UsernameScreen extends StatefulWidget {
 }
 
 final _formKey = GlobalKey<FormState>();
-final _scaffoldKey = GlobalKey<ScaffoldState>();
 
 class _UsernameScreenState extends State<UsernameScreen> {
   bool isNotEmpty = false;
 
-  Future<void> saveUser() async {
-    String url = 'http://192.168.10.8:3000/user';
-    var header = {'Content-Type': 'application/json; charset=UTF-8'};
-    var body = {
-      'PubgUsername': _controller.text,
-    };
-    http.Response res =
-        await http.post(url, headers: header, body: json.encode(body));
-    print(res.body);
-  }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
       backgroundColor: backgorundColor,
       body: Form(
         key: _formKey,
@@ -72,9 +63,10 @@ class _UsernameScreenState extends State<UsernameScreen> {
                 });
                 try {
                   if (_formKey.currentState.validate()) {
-                    saveUser().whenComplete(() async {
+                    saveUser(_controller.text).whenComplete(() async {
                       SharedPreferences _pref = await SharedPreferences.getInstance();
                       _pref.setString('username', _controller.text);
+                      _pref.setString('id', users[0].id);
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) => AdminPanal()));
                     });
