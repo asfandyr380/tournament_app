@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tournament_app/Models/pubgUser.dart';
 import 'package:tournament_app/Services/network.dart';
 import 'package:tournament_app/Ui/admin_panal.dart';
 import 'package:tournament_app/const.dart';
@@ -9,7 +8,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 
 final TextEditingController _controller = TextEditingController();
-List<User> users = [];
 
 class UsernameScreen extends StatefulWidget {
   @override
@@ -20,8 +18,6 @@ final _formKey = GlobalKey<FormState>();
 
 class _UsernameScreenState extends State<UsernameScreen> {
   bool isNotEmpty = false;
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +62,7 @@ class _UsernameScreenState extends State<UsernameScreen> {
                     saveUser(_controller.text).whenComplete(() async {
                       SharedPreferences _pref = await SharedPreferences.getInstance();
                       _pref.setString('username', _controller.text);
-                      _pref.setString('id', users[0].id);
+                      _pref.setString('id', newUser.id);
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) => AdminPanal()));
                     });

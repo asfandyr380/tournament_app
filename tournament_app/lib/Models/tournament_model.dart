@@ -1,6 +1,4 @@
-
-
-class Tournament{
+class Tournament {
   String id;
   String title;
   String roomID;
@@ -10,15 +8,17 @@ class Tournament{
   String date;
   String time;
   int joined;
-
+  bool isJoined;
+  
   Tournament(
-      {
-        this.id,
-        this.date,
+      {this.isJoined,
+      this.id,
+      this.date,
       this.map,
       this.roomID,
       this.roomPass,
       this.time,
       this.title,
-      this.type, this.joined});
+      this.type,
+      this.joined});
 }

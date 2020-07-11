@@ -24,7 +24,7 @@ class _CardDesignState extends State<CardDesign> {
       child: Container(
         width: 346,
         height: 274,
-        margin: EdgeInsets.only(left: 10, right: 10, top: 40),
+        margin: EdgeInsets.only(left: 10, right: 10, top: 10),
         decoration: BoxDecoration(
             boxShadow: [BoxShadow(color: Colors.black38, blurRadius: 10)],
             borderRadius: BorderRadius.circular(10),
@@ -136,6 +136,7 @@ class _CardDesignState extends State<CardDesign> {
                   ),
                 ),
                 CustomButton(
+                  color: widget.infolist[widget.index].isJoined == true && widget.infolist[widget.index].joined != 100 ? buttonColor : Colors.grey,
                   onPressed: widget.buttonOnTap,
                   width: 100,
                   lable: 'Join',

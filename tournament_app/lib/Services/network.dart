@@ -1,10 +1,11 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:tournament_app/Models/pubgUser.dart';
-import 'package:tournament_app/Ui/username_screen.dart';
+
+
+User newUser;
 
 // Update the Joined Player Count
-
 Future<void> updateJoin(var join, String id) async {
   var header = {'Content-Type': 'application/json; charset=UTF-8'};
   var body = {
@@ -18,8 +19,7 @@ Future<void> updateJoin(var join, String id) async {
 }
 
 // Save The New User
-
-Future<User> saveUser(String text) async {
+Future<void> saveUser(String text) async {
   String url = 'http://192.168.10.3:3000/user';
   var header = {'Content-Type': 'application/json; charset=UTF-8'};
   var body = {
@@ -30,10 +30,11 @@ Future<User> saveUser(String text) async {
   var jbody = json.decode(res.body);
 
   for (var jdata in jbody) {
-    User newUser = User(
+    User user = User(
       id: jdata['_id'],
       username: jdata['PubgUsername'],
       date: jdata['Date'],
     );
+    newUser = user;
   }
 }
