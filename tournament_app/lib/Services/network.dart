@@ -12,7 +12,7 @@ Future<void> updateJoin(var join, String id) async {
     "joined": join,
   };
   http.Response res = await http.patch(
-      'http://192.168.10.3:3000/tournaments/updateOne/$id',
+      'http://192.168.10.7:3000/tournaments/updateOne/$id',
       headers: header,
       body: json.encode(body));
   print(res.body);
@@ -20,7 +20,7 @@ Future<void> updateJoin(var join, String id) async {
 
 // Save The New User
 Future<void> saveUser(String text) async {
-  String url = 'http://192.168.10.3:3000/user';
+  String url = 'http://192.168.10.7:3000/user';
   var header = {'Content-Type': 'application/json; charset=UTF-8'};
   var body = {
     'PubgUsername': text,

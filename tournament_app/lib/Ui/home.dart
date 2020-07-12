@@ -27,7 +27,7 @@ class _HomeState extends State<Home> {
   }
 
   Future<List<Tournament>> getTournament() async {
-    String url = 'http://192.168.10.3:3000/tournaments';
+    String url = 'http://192.168.10.7:3000/tournaments';
     var res = await http.get(url);
     var jsondata = json.decode(res.body);
 
@@ -67,7 +67,7 @@ class _HomeState extends State<Home> {
           children: <Widget>[
             Container(
               margin: EdgeInsets.only(top: 50, right: 200),
-              child: Text('newUser', style: TextStyle(fontSize: 30),),
+              child: Text('newUser.username', style: TextStyle(fontSize: 30),),
             ),
             Expanded(
               child: ListView.builder(

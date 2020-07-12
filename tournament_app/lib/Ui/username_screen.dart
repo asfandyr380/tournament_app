@@ -3,7 +3,6 @@ import 'package:tournament_app/Services/network.dart';
 import 'package:tournament_app/Ui/admin_panal.dart';
 import 'package:tournament_app/const.dart';
 import 'Widgets/custom_Button.dart';
-import 'home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -52,6 +51,7 @@ class _UsernameScreenState extends State<UsernameScreen> {
               ),
             ),
             CustomButton(
+              color: buttonColor,
               lable: 'Save',
               onPressed: () {
                 setState(() {
@@ -75,7 +75,7 @@ class _UsernameScreenState extends State<UsernameScreen> {
             GestureDetector(
               onTap: () {
                 Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => Home()));
+                    context, MaterialPageRoute(builder: (context) => AdminPanal()));
               },
               child: Container(
                 child: Text('Admin Panal',
