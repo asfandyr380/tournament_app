@@ -27,7 +27,7 @@ class _HomeState extends State<Home> {
   }
 
   Future<List<Tournament>> getTournament() async {
-    String url = 'http://192.168.10.7:3000/tournaments';
+    String url = 'http://192.168.10.5:3000/tournaments';
     var res = await http.get(url);
     var jsondata = json.decode(res.body);
 
