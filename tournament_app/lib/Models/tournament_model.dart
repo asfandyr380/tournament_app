@@ -1,4 +1,7 @@
+import 'enroll.dart';
+
 class Tournament {
+  Enrolled enroll;
   String id;
   String title;
   String roomID;
@@ -9,9 +12,10 @@ class Tournament {
   String time;
   int joined;
   bool isJoined;
-  
+
   Tournament(
-      {this.isJoined,
+      {this.enroll,
+      this.isJoined,
       this.id,
       this.date,
       this.map,

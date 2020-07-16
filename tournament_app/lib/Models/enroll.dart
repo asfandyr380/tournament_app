@@ -1,7 +1,6 @@
-class Enrolled 
-{
-  bool isJoined;
-  String userJoined;
+class Enrolled {
+  List userJoined;
+  String adminCreated;
 
-  Enrolled({this.isJoined, this.userJoined});
+  Enrolled({this.userJoined, this.adminCreated});
 }

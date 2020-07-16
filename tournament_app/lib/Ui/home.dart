@@ -18,7 +18,6 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
-  bool isEnable = true;
 
   void checkJoin() async
   {
@@ -74,10 +73,11 @@ class _HomeState extends State<Home> {
                   itemCount: list.length,
                   itemBuilder: (context, i) {
                     return CardDesign(
+                      isAdmin: false,
                       index: i,
                       infolist: list,
                       buttonOnTap: list[i].isJoined == true ? () async {
-                        await updateJoin(list[i].joined += 1, list[i].id);
+                        await updateJoin(list, i);
                         SharedPreferences _pref = await SharedPreferences.getInstance();
                          _pref.setBool('isJoined', false);
                         setState(() {

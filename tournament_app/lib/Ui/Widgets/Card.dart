@@ -5,12 +5,13 @@ import '../../const.dart';
 import 'custom_Button.dart';
 
 class CardDesign extends StatefulWidget {
+  final bool isAdmin;
   final int index;
   final List infolist;
   final Function onPressed;
   final Function buttonOnTap;
 
-  CardDesign({this.infolist, this.index, this.onPressed, this.buttonOnTap});
+  CardDesign({this.isAdmin,this.infolist, this.index, this.onPressed, this.buttonOnTap});
 
   @override
   _CardDesignState createState() => _CardDesignState();
@@ -136,10 +137,10 @@ class _CardDesignState extends State<CardDesign> {
                   ),
                 ),
                 CustomButton(
-                  color: widget.infolist[widget.index].isJoined == true && widget.infolist[widget.index].joined != 100 ? buttonColor : Colors.grey,
+                  color: widget.isAdmin == false ? buttonColor: Colors.red,
                   onPressed: widget.buttonOnTap,
                   width: 100,
-                  lable: 'Join',
+                  lable: widget.isAdmin == false ? 'Join': 'Delete',
                   margin: EdgeInsets.only(left: 20, top: 25),
                 ),
               ],

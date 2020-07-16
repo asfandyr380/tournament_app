@@ -2,17 +2,16 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:tournament_app/Models/pubgUser.dart';
 
-
 User newUser;
 
 // Update the Joined Player Count
-Future<void> updateJoin(var join, String id) async {
+Future<void> updateJoin(List list, int index) async {
   var header = {'Content-Type': 'application/json; charset=UTF-8'};
   var body = {
-    "joined": join,
+    "joined": list[index].joined += 1,
   };
   http.Response res = await http.patch(
-      'http://192.168.10.5:3000/tournaments/updateOne/$id',
+      'http://192.168.10.5:3000/tournaments/updateOne/${list[index].id}',
       headers: header,
       body: json.encode(body));
   print(res.body);

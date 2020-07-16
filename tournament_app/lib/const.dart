@@ -7,6 +7,7 @@ const Color cardColor = Color(0xff55554E);
 const Color adminContainerColor = Color(0xff6C9092);
 const Color dateTimePickerColor = Color(0xff7A4C5C);
 const Color adminPanalTextColor = Color(0xffD2F5F4);
+const Color adminHomeContainerColor = Color(0xff6C9092);
 
 // TextField Input Decoractions
 final InputDecoration inputDecoration = InputDecoration(

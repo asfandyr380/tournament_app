@@ -6,6 +6,10 @@ import 'package:tournament_app/const.dart';
 import 'Widgets/custom_Button.dart';
 import 'package:http/http.dart' as http;
 
+
+
+AdminUser adminNewUser;
+
 class AdminPanal extends StatefulWidget {
   @override
   _AdminPanalState createState() => _AdminPanalState();
@@ -13,18 +17,18 @@ class AdminPanal extends StatefulWidget {
 
 class _AdminPanalState extends State<AdminPanal> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController username_Controller = TextEditingController();
-  final TextEditingController pass_Controller = TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController passController = TextEditingController();
   bool isNotEmpty = false;
-  AdminUser newUser;
+  
   bool successlogin;
 
   Future<void> signInUser() async {
     String url = 'http://192.168.10.5:3000/admin/logIn';
     var header = {'Content-Type': 'application/json; charset=UTF-8'};
     var body = {
-      'username': username_Controller.text,
-      'password': pass_Controller.text
+      'username': usernameController.text,
+      'password': passController.text
     };
     http.Response res =
         await http.post(url, headers: header, body: json.encode(body));
@@ -38,7 +42,7 @@ class _AdminPanalState extends State<AdminPanal> {
           username: jdata['username'],
           password: jdata['password'],
         );
-        newUser = newAdminUser;
+        adminNewUser = newAdminUser;
       }
       successlogin = true;
     } else if (res.statusCode == 400) {
@@ -76,7 +80,7 @@ class _AdminPanalState extends State<AdminPanal> {
                       }
                       return null;
                     },
-                    controller: username_Controller,
+                    controller: usernameController,
                     decoration: inputDecoration.copyWith(
                         hintText: 'Enter Username', labelText: 'Username'),
                   ),
@@ -91,7 +95,7 @@ class _AdminPanalState extends State<AdminPanal> {
                       }
                       return null;
                     },
-                    controller: pass_Controller,
+                    controller: passController,
                     decoration: inputDecoration.copyWith(
                         hintText: 'Enter Password', labelText: 'Password'),
                   ),
