@@ -4,6 +4,7 @@ import 'package:tournament_app/Ui/admin_panal.dart';
 import 'package:tournament_app/const.dart';
 import 'Widgets/custom_Button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'home.dart';
 
 
 final TextEditingController _controller = TextEditingController();
@@ -60,11 +61,8 @@ class _UsernameScreenState extends State<UsernameScreen> {
                 try {
                   if (_formKey.currentState.validate()) {
                     saveUser(_controller.text).whenComplete(() async {
-                      SharedPreferences _pref = await SharedPreferences.getInstance();
-                      _pref.setString('username', _controller.text);
-                      _pref.setString('id', newUser.id);
                         Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => AdminPanal()));
+                            MaterialPageRoute(builder: (context) => Home()));
                     });
                   }
                 } catch (error) {

@@ -11,11 +11,9 @@ class Tournament {
   String date;
   String time;
   int joined;
-  bool isJoined;
 
   Tournament(
       {this.enroll,
-      this.isJoined,
       this.id,
       this.date,
       this.map,

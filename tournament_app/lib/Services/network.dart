@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tournament_app/Models/pubgUser.dart';
 
 User newUser;
@@ -18,22 +19,28 @@ Future<void> updateJoin(List list, int index) async {
 }
 
 // Save The New User
-Future<void> saveUser(String text) async {
-  String url = 'http://192.168.10.5:3000/user';
+Future<User> saveUser(String text) async {
+  SharedPreferences _pref = await SharedPreferences.getInstance();
+  String url = 'http://192.168.10.4:3000/user';
   var header = {'Content-Type': 'application/json; charset=UTF-8'};
   var body = {
     'PubgUsername': text,
   };
   http.Response res =
       await http.post(url, headers: header, body: json.encode(body));
-  var jbody = json.decode(res.body);
-
-  for (var jdata in jbody) {
-    User user = User(
-      id: jdata['_id'],
-      username: jdata['PubgUsername'],
-      date: jdata['Date'],
-    );
-    newUser = user;
-  }
+  Map decodedata = json.decode(res.body);
+  if(decodedata != null)
+  {
+    String user = jsonEncode(User.formJson(decodedata));
+    _pref.setString('newUser', user);
+    return User.formJson(decodedata);
+  } 
+  return null;
 }
+
+Future<User> getSavedInfo()async{
+ SharedPreferences preferences = await SharedPreferences.getInstance();
+ Map userMap = jsonDecode(preferences.getString('newUser'));
+  User user = User.formJson(userMap);
+  return user;
+ }

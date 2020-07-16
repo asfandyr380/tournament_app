@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tournament_app/Ui/Add_Screen.dart';
 import 'package:tournament_app/const.dart';
-
+import 'Widgets/card02.dart';
+import 'Widgets/roundButton.dart';
 
 class AdminHome extends StatefulWidget {
   @override
@@ -35,25 +36,18 @@ class _AdminHomeState extends State<AdminHome> {
               ),
             ],
           ),
-          Expanded(child: ListView.builder(itemBuilder: (context, i) {}))
+          Expanded(
+            child: ListView.builder(
+              itemCount: infoList.length,
+              itemBuilder: (context, i) {
+                return card02(infolist: infoList, index: i);
+              },
+            ),
+          ),
         ],
       ),
     );
   }
 }
 
-Widget roundButton({context, Function onPressed}) {
-  return GestureDetector(
-    onTap: onPressed,
-    child: Container(
-      height: 70,
-      width: 70,
-      margin: EdgeInsets.only(
-          top: 120, left: MediaQuery.of(context).size.width * 0.4),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: buttonColor,
-      ),
-    ),
-  );
-}
+

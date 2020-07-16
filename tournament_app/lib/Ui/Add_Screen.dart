@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:tournament_app/Models/tournament_model.dart';
 import 'package:tournament_app/Ui/Widgets/custom_Button.dart';
@@ -44,7 +43,7 @@ class _AddScreenState extends State<AddScreen> {
 
   Future<void> postTournament() async
   {
-    String url = 'http://192.168.10.5:3000/tournaments';
+    String url = 'http://192.168.10.4:3000/tournaments';
     var body = {
       'title': titleController.text,
       'roomId': idController.text,
@@ -53,7 +52,7 @@ class _AddScreenState extends State<AddScreen> {
       'mapType': mapController.text,
       'type': typeController.text,
       'time': _selectedTime.format(context),
-      'date': selectedDate.toString(),
+      'date': selectedDate.toString().split(' ')[0],
     };
     var header = {
       'Content-Type': 'application/json; charset=UTF-8'
@@ -61,9 +60,7 @@ class _AddScreenState extends State<AddScreen> {
     http.Response res = await http.post(url, headers: header, body: json.encode(body));
     if(res.statusCode == 201)
     {
-      var jbody = json.decode(res.body);
-      for(var jdata in jbody)
-      {
+      Map<String, dynamic> jdata = json.decode(res.body);
         Tournament info = Tournament(
           id: jdata['_id'],
           title: jdata['title'],
@@ -78,7 +75,7 @@ class _AddScreenState extends State<AddScreen> {
         setState(() {
           infoList.add(info);
         });
-      }
+      
     }
   }
 

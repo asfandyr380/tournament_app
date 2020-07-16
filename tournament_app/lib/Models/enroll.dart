@@ -1,6 +1,5 @@
 class Enrolled {
-  List userJoined;
-  String adminCreated;
+  String userJoined;
 
-  Enrolled({this.userJoined, this.adminCreated});
+  Enrolled({this.userJoined});
 }
