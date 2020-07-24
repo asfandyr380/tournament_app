@@ -1,7 +1,12 @@
 class AdminUser {
   String id;
   String username;
-  String password;
 
-  AdminUser({this.id, this.username, this.password});
+  AdminUser({this.id, this.username});
+
+  factory AdminUser.fromJson(Map<String, dynamic> json) {
+    return AdminUser(
+      id: json['_id'],
+     username: json['username']);
+  }
 }

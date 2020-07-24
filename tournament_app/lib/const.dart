@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+const baseUrl = 'http://192.168.10.6:3000';
+
 // all The Colors Used In The Entire App
 const Color backgorundColor = Color(0xff474747);
 const Color buttonColor = Color(0xff56C6DE);

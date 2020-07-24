@@ -43,7 +43,7 @@ class _AddScreenState extends State<AddScreen> {
 
   Future<void> postTournament() async
   {
-    String url = 'http://192.168.10.4:3000/tournaments';
+    String url = '$baseUrl/tournaments';
     var body = {
       'title': titleController.text,
       'roomId': idController.text,

@@ -3,7 +3,6 @@ import 'package:tournament_app/Services/network.dart';
 import 'package:tournament_app/Ui/admin_panal.dart';
 import 'package:tournament_app/const.dart';
 import 'Widgets/custom_Button.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'home.dart';
 
 
@@ -18,7 +17,7 @@ final _formKey = GlobalKey<FormState>();
 
 class _UsernameScreenState extends State<UsernameScreen> {
   bool isNotEmpty = false;
-
+ 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,7 +59,7 @@ class _UsernameScreenState extends State<UsernameScreen> {
                 });
                 try {
                   if (_formKey.currentState.validate()) {
-                    saveUser(_controller.text).whenComplete(() async {
+                    saveUser(text:_controller.text).whenComplete(() async {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) => Home()));
                     });

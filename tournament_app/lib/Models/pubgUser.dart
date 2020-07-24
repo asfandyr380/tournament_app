@@ -1,27 +1,21 @@
-class User 
-{
+class User {
   String id;
   String username;
   String date;
 
-  User({this.date,this.id,this.username});
+  User({this.date, this.id, this.username});
 
-  User.formJson(Map<String, dynamic> json)
-  {
-    id = json['id'];
-    username = json['username'];
-    date = json['date'];
+  factory User.formJson(Map<String, dynamic> json) {
+    return User(
+      id: json['_id'],
+      username: json['Username'],
+      date: json['date']);
   }
 
-  Map<String, dynamic> toJson()
+  Map<String, dynamic> toJson() =>
   {
-   final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['username'] = this.username;
-    data['date'] = this.date;
-    return data;
-  }
-  
-
-
+    'id': id,
+    'username': username,
+    'date': date
+  };
 }

@@ -6,8 +6,6 @@ import 'package:tournament_app/const.dart';
 import 'Widgets/custom_Button.dart';
 import 'package:http/http.dart' as http;
 
-
-
 AdminUser adminNewUser;
 
 class AdminPanal extends StatefulWidget {
@@ -24,7 +22,7 @@ class _AdminPanalState extends State<AdminPanal> {
   bool successlogin;
 
   Future<void> signInUser() async {
-    String url = 'http://192.168.10.4:3000/admin/logIn';
+    String url = '$baseUrl/admin/logIn';
     var header = {'Content-Type': 'application/json; charset=UTF-8'};
     var body = {
       'username': usernameController.text,
@@ -40,7 +38,6 @@ class _AdminPanalState extends State<AdminPanal> {
         AdminUser newAdminUser = AdminUser(
           id: jdata['_id'],
           username: jdata['username'],
-          password: jdata['password'],
         );
         adminNewUser = newAdminUser;
       }

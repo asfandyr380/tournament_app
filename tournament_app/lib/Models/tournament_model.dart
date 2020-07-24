@@ -1,7 +1,4 @@
-import 'enroll.dart';
-
 class Tournament {
-  Enrolled enroll;
   String id;
   String title;
   String roomID;
@@ -11,9 +8,11 @@ class Tournament {
   String date;
   String time;
   int joined;
-
+  String createdBy;
+  List joinedUsers;
   Tournament(
-      {this.enroll,
+      {this.createdBy,
+      this.joinedUsers,
       this.id,
       this.date,
       this.map,
@@ -23,4 +22,20 @@ class Tournament {
       this.title,
       this.type,
       this.joined});
+
+  factory Tournament.fromJson(Map<String, dynamic> json) {
+    return Tournament(
+      id: json['_id'],
+      title: json['title'],
+      roomID: json['roomId'],
+      roomPass: json['roomPass'],
+      map: json['mapType'],
+      type: json['type'],
+      date: json['date'],
+      time: json['time'],
+      joined: json['joined'],
+      createdBy: json['createdBy'],
+      joinedUsers: json['JoinedUsers'],
+    );
+  }
 }

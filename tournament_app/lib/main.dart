@@ -6,7 +6,7 @@ import 'Ui/username_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences _pref = await SharedPreferences.getInstance();
-  var username = _pref.getString('username');
+  var username = _pref.getString('user');
   runApp(MaterialApp(
     theme: ThemeData.dark(),
     debugShowCheckedModeBanner: false,

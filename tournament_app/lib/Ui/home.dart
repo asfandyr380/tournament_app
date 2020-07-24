@@ -1,14 +1,12 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:tournament_app/Models/enroll.dart';
 import 'package:tournament_app/Services/network.dart';
+import 'package:tournament_app/Services/storage.dart';
 import 'package:tournament_app/const.dart';
 import 'package:http/http.dart' as http;
 import 'package:tournament_app/Models/tournament_model.dart';
 import 'Widgets/Card.dart';
 import 'details_Screen.dart';
-
-List<Tournament> list = [];
 
 class Home extends StatefulWidget {
   @override
@@ -16,35 +14,35 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+
+  String username;
+  String id;
+
   Future<List<Tournament>> getTournament() async {
-    String url = 'http://192.168.10.4:3000/tournaments';
+    String url = '$baseUrl/tournaments';
     var res = await http.get(url);
-    var jsondata = json.decode(res.body);
-    Enrolled enroll = Enrolled(userJoined: "");
-    for (var data in jsondata) {
-      Tournament info = Tournament(
-          enroll: enroll,
-          id: data['_id'],
-          date: data['date'],
-          time: data['time'],
-          roomID: data['roomId'],
-          roomPass: data['roomPass'],
-          joined: data['joined'],
-          map: data['mapType'],
-          title: data['title'],
-          type: data['type']);
-      setState(() {
-        list.add(info);
-      });
+    final decodedBody = json.decode(res.body).cast<Map<String, dynamic>>();
+    if (res.statusCode == 200 && decodedBody != null) {
+      return decodedBody.map<Tournament>((item) => Tournament.fromJson(item)).toList();
+    } else {
+      return throw Exception('error');
     }
-    print(list.length);
-    return list;
   }
 
   @override
   void initState() {
     super.initState();
-    getTournament();
+    getTournament(); 
+    read('user').then((value) {
+      setState(() {
+        username = value;
+      });
+      read('id').then((value) {
+        setState(() {
+          id = value;
+        });
+      });
+    });
   }
 
   @override
@@ -56,41 +54,42 @@ class _HomeState extends State<Home> {
           children: <Widget>[
             Container(
               margin: EdgeInsets.only(top: 50, right: 200),
-              child: Text(newUser.username,
+              child: Text(username,
                 style: TextStyle(fontSize: 30),
               ),
             ),
-            Expanded(
-              child: ListView.builder(
-                  itemCount: list.length,
-                  itemBuilder: (context, i) {
-                    return CardDesign(
-                      isAdmin: false,
-                      index: i,
-                      infolist: list,
-                      buttonOnTap: list[i].enroll.userJoined != newUser.username 
-                          ? () async {
-                              await updateJoin(list, i);
-                              setState(() {
-                                list[i].enroll.userJoined = newUser.username;
-                              });
-                              print(i);
-                            }
-                          : null,
-                      onPressed: list[i].enroll.userJoined == newUser.username
-                          ? () {
+            FutureBuilder<List<Tournament>>(
+              future: getTournament(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Expanded(
+                    child: ListView.builder(
+                        itemCount: snapshot.data.length,
+                        itemBuilder: (context, i) {
+                          return CardDesign(
+                            isAdmin: false,
+                            infolist: snapshot.data,
+                            index: i,
+                            buttonOnTap: () async {
+                              await updateJoin(snapshot.data, i, id);
+                              print(snapshot.data[i].joinedUsers);
+                            },
+                            onPressed: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => DetailsScreen(
-                                    tournamentinfo: list[i],
+                                    tournamentinfo: snapshot.data[i],
                                   ),
                                 ),
                               );
-                            }
-                          : null,
-                    );
-                  }),
+                            },
+                          );
+                        }),
+                  );
+                }
+                return Container();
+              },
             ),
           ]),
     );
