@@ -62,6 +62,7 @@ class _UsernameScreenState extends State<UsernameScreen> {
                     saveUser(text:_controller.text).whenComplete(() async {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) => Home()));
+                            _controller.clear();
                     });
                   }
                 } catch (error) {

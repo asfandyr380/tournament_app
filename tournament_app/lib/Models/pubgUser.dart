@@ -11,11 +11,4 @@ class User {
       username: json['Username'],
       date: json['date']);
   }
-
-  Map<String, dynamic> toJson() =>
-  {
-    'id': id,
-    'username': username,
-    'date': date
-  };
 }

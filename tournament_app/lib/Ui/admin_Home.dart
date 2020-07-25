@@ -10,6 +10,9 @@ class AdminHome extends StatefulWidget {
 }
 
 class _AdminHomeState extends State<AdminHome> {
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,14 +39,6 @@ class _AdminHomeState extends State<AdminHome> {
               ),
             ],
           ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: infoList.length,
-              itemBuilder: (context, i) {
-                return card02(infolist: infoList, index: i);
-              },
-            ),
-          ),
         ],
       ),
     );
@@ -51,3 +46,11 @@ class _AdminHomeState extends State<AdminHome> {
 }
 
 
+// Expanded(
+//             child: ListView.builder(
+//               itemCount: infoList.length,
+//               itemBuilder: (context, i) {
+//                 return card02(infolist: infoList, index: i);
+//               },
+//             ),
+//           ),

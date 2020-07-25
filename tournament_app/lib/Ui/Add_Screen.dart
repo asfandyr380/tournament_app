@@ -1,12 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:tournament_app/Models/tournament_model.dart';
+import 'package:tournament_app/Services/storage.dart';
 import 'package:tournament_app/Ui/Widgets/custom_Button.dart';
 import 'package:tournament_app/const.dart';
 import 'package:http/http.dart' as http;
 
-
-List<Tournament> infoList = [];
 
 class AddScreen extends StatefulWidget {
   @override
@@ -14,6 +13,10 @@ class AddScreen extends StatefulWidget {
 }
 
 class _AddScreenState extends State<AddScreen> {
+
+  String username;
+  String id;
+
   TextEditingController titleController = TextEditingController();
   TextEditingController idController = TextEditingController();
   TextEditingController passController = TextEditingController();
@@ -39,7 +42,6 @@ class _AddScreenState extends State<AddScreen> {
     }
   }
 
-  
 
   Future<void> postTournament() async
   {
@@ -53,32 +55,33 @@ class _AddScreenState extends State<AddScreen> {
       'type': typeController.text,
       'time': _selectedTime.format(context),
       'date': selectedDate.toString().split(' ')[0],
+      'createdBy': id
     };
     var header = {
       'Content-Type': 'application/json; charset=UTF-8'
     };
     http.Response res = await http.post(url, headers: header, body: json.encode(body));
-    if(res.statusCode == 201)
+    Map decodedBody = json.decode(res.body);
+    if(res.statusCode == 201 && decodedBody != null)
     {
-      Map<String, dynamic> jdata = json.decode(res.body);
-        Tournament info = Tournament(
-          id: jdata['_id'],
-          title: jdata['title'],
-          roomID: jdata['roomId'],
-          roomPass: jdata['roomPass'],
-          joined: jdata['joined'],
-          map: jdata['mapType'],
-          type: jdata['type'],
-          time: jdata['time'],
-          date: jdata['date'],
-        );
-        setState(() {
-          infoList.add(info);
-        });
-      
+      return Tournament.fromJson(decodedBody);
     }
   }
 
+   @override
+  void initState() {
+    super.initState();
+    read('admin').then((value) {
+      setState(() {
+        username = value;
+      });
+    });
+    read('adminId').then((value) {
+       setState(() {
+        id = value;
+      });
+    });
+  }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(

@@ -1,3 +1,4 @@
+
 class Tournament {
   String id;
   String title;
@@ -9,7 +10,8 @@ class Tournament {
   String time;
   int joined;
   String createdBy;
-  List joinedUsers;
+  List<String> joinedUsers;
+
   Tournament(
       {this.createdBy,
       this.joinedUsers,
@@ -24,18 +26,30 @@ class Tournament {
       this.joined});
 
   factory Tournament.fromJson(Map<String, dynamic> json) {
+    List list = json['joinedUsers'];
+    List<String> userList = new List<String>.from(list);
+
     return Tournament(
-      id: json['_id'],
-      title: json['title'],
-      roomID: json['roomId'],
-      roomPass: json['roomPass'],
-      map: json['mapType'],
-      type: json['type'],
-      date: json['date'],
-      time: json['time'],
-      joined: json['joined'],
-      createdBy: json['createdBy'],
-      joinedUsers: json['JoinedUsers'],
-    );
+        id: json['_id'],
+        title: json['title'],
+        roomID: json['roomId'],
+        roomPass: json['roomPass'],
+        map: json['mapType'],
+        type: json['type'],
+        date: json['date'],
+        time: json['time'],
+        joined: json['joined'],
+        createdBy: json['createdBy'],
+        joinedUsers: userList);
+  }
+}
+
+class UserIds {
+  String userId;
+
+  UserIds({this.userId});
+
+  factory UserIds.fromJson(Map<String, dynamic> parsedJson) {
+    return UserIds(userId: parsedJson['\$oid']);
   }
 }

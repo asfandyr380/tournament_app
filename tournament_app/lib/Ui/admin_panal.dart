@@ -1,12 +1,8 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:tournament_app/Models/adminUser.dart';
+import 'package:tournament_app/Services/network.dart';
 import 'package:tournament_app/Ui/admin_Home.dart';
 import 'package:tournament_app/const.dart';
 import 'Widgets/custom_Button.dart';
-import 'package:http/http.dart' as http;
-
-AdminUser adminNewUser;
 
 class AdminPanal extends StatefulWidget {
   @override
@@ -18,34 +14,6 @@ class _AdminPanalState extends State<AdminPanal> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passController = TextEditingController();
   bool isNotEmpty = false;
-  
-  bool successlogin;
-
-  Future<void> signInUser() async {
-    String url = '$baseUrl/admin/logIn';
-    var header = {'Content-Type': 'application/json; charset=UTF-8'};
-    var body = {
-      'username': usernameController.text,
-      'password': passController.text
-    };
-    http.Response res =
-        await http.post(url, headers: header, body: json.encode(body));
-        
-    if (res.statusCode == 200) {
-      var jbody = json.decode(res.body);
-      print(jbody);
-      for (var jdata in jbody) {
-        AdminUser newAdminUser = AdminUser(
-          id: jdata['_id'],
-          username: jdata['username'],
-        );
-        adminNewUser = newAdminUser;
-      }
-      successlogin = true;
-    } else if (res.statusCode == 400) {
-      successlogin = false;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -102,13 +70,12 @@ class _AdminPanalState extends State<AdminPanal> {
                   color: buttonColor,
                   lable: 'Sign In',
                   onPressed: () async {
-                    await signInUser();
-                    if (successlogin == true) {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => AdminHome()));
-                    }else {
-                      print('Invalid Information');
-                    }
+                    await signInUser(
+                            usernameController.text, passController.text)
+                        .whenComplete(() => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AdminHome())));
                     setState(() {
                       isNotEmpty = true;
                     });
