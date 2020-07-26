@@ -5,8 +5,8 @@ import 'package:tournament_app/const.dart';
 
 Widget card02({List infolist, int index}) {
   return GestureDetector(
-      child: Container(
-      height: 250,
+    child: Container(
+      height: 150,
       width: 10,
       margin: EdgeInsets.only(top: 10, left: 10, right: 10),
       decoration: BoxDecoration(
@@ -23,108 +23,25 @@ Widget card02({List infolist, int index}) {
               infolist[index].title,
               style: TextStyle(fontSize: 57),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                Text(
-                  'Date',
-                  style: TextStyle(fontSize: 27),
+            Container(
+              width: 350,
+              child: Expanded(
+                child: RoundedProgressBar(
+                  margin: EdgeInsets.only(top: 20),
+                  childCenter: Text(
+                    '${infolist[index].joined}',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  style: RoundedProgressBarStyle(
+                    colorProgress: buttonColor,
+                    borderWidth: 0,
+                    widthShadow: 0,
+                  ),
+                  height: 20,
+                  percent: infolist[index].joined.toDouble(),
                 ),
-                SizedBox(
-                  width: 30,
-                ),
-                Text(
-                  'Time',
-                  style: TextStyle(fontSize: 27),
-                ),
-              ],
+              ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                Text(
-                  infolist[index].date,
-                  style: TextStyle(
-                    fontSize: 16,
-                  ),
-                ),
-                SizedBox(
-                  width: 30,
-                ),
-                Text(
-                  infolist[index].time,
-                  style: TextStyle(
-                    fontSize: 16,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                Text(
-                  'MAP',
-                  style: TextStyle(
-                    fontSize: 27,
-                  ),
-                ),
-                SizedBox(
-                  width: 30,
-                ),
-                Text(
-                  'TYPE',
-                  style: TextStyle(
-                    fontSize: 27,
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                Text(
-                  infolist[index].map,
-                  style: TextStyle(
-                    fontSize: 16,
-                  ),
-                ),
-                SizedBox(
-                  width: 30,
-                ),
-                Text(
-                  infolist[index].type,
-                  style: TextStyle(
-                    fontSize: 16,
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: <Widget>[
-                Container(
-                  width: 350,
-                  margin: EdgeInsets.only(top: 30, left: 20),
-                  child: Expanded(
-                    child: RoundedProgressBar(
-                      childCenter: Text(
-                        '${infolist[index].joined}',
-                        style: TextStyle(color: Colors.black),
-                      ),
-                      style: RoundedProgressBarStyle(
-                        colorProgress: buttonColor,
-                        borderWidth: 0,
-                        widthShadow: 0,
-                      ),
-                      height: 20,
-                      percent: infolist[index].joined.toDouble(),
-                    ),
-                  ),
-                ),
-              ],
-            )
           ],
         ),
       ),

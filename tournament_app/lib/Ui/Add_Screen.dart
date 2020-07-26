@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:tournament_app/Models/tournament_model.dart';
+import 'package:tournament_app/Services/network.dart';
 import 'package:tournament_app/Services/storage.dart';
 import 'package:tournament_app/Ui/Widgets/custom_Button.dart';
 import 'package:tournament_app/const.dart';
@@ -42,31 +43,6 @@ class _AddScreenState extends State<AddScreen> {
     }
   }
 
-
-  Future<void> postTournament() async
-  {
-    String url = '$baseUrl/tournaments';
-    var body = {
-      'title': titleController.text,
-      'roomId': idController.text,
-      'roomPass': passController.text,
-      'joined': 0,
-      'mapType': mapController.text,
-      'type': typeController.text,
-      'time': _selectedTime.format(context),
-      'date': selectedDate.toString().split(' ')[0],
-      'createdBy': id
-    };
-    var header = {
-      'Content-Type': 'application/json; charset=UTF-8'
-    };
-    http.Response res = await http.post(url, headers: header, body: json.encode(body));
-    Map decodedBody = json.decode(res.body);
-    if(res.statusCode == 201 && decodedBody != null)
-    {
-      return Tournament.fromJson(decodedBody);
-    }
-  }
 
    @override
   void initState() {
@@ -253,7 +229,10 @@ class _AddScreenState extends State<AddScreen> {
                   CustomButton(
                     onPressed: () {
                       if (_formKey.currentState.validate()) {
-                        postTournament().whenComplete(() => Navigator.pop(context));
+                        postTournament(
+                          context, titleController.text, idController.text, passController.text, mapController.text, typeController.text,
+                          _selectedTime, selectedDate, id
+                        ).whenComplete(() => Navigator.pop(context, true));
                         setState(() {
                           isNotEmpty = true;
                         });

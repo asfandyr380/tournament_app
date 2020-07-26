@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:tournament_app/Models/tournament_model.dart';
+import 'package:tournament_app/Services/network.dart';
+import 'package:tournament_app/Services/storage.dart';
 import 'package:tournament_app/Ui/Add_Screen.dart';
 import 'package:tournament_app/const.dart';
 import 'Widgets/card02.dart';
@@ -11,6 +14,18 @@ class AdminHome extends StatefulWidget {
 
 class _AdminHomeState extends State<AdminHome> {
 
+  bool isAdded;
+  String id;
+
+  @override
+  void initState() {
+    super.initState();
+    read('adminId').then((value) {
+      setState(() {
+        id = value;
+      });
+    });
+  }
 
 
   @override
@@ -32,25 +47,32 @@ class _AdminHomeState extends State<AdminHome> {
               ),
               roundButton(
                 context: context,
-                onPressed: () {
-                  Navigator.push(context,
+                onPressed: () async {
+                  isAdded = await Navigator.push(context,
                       MaterialPageRoute(builder: (context) => AddScreen()));
                 },
               ),
             ],
+          ),
+          FutureBuilder<List<Tournament>>(
+            future: getTournament(),
+            builder: (context, snapshot) {
+              return Expanded(
+                child: ListView.builder(
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (context, i) {
+                    if(snapshot.hasData && snapshot.data[i].createdBy == id)
+                    {
+                      return card02(infolist: snapshot.data, index: i);
+                    }
+                    return Container();
+                  }
+                ),
+              );
+            },
           ),
         ],
       ),
     );
   }
 }
-
-
-// Expanded(
-//             child: ListView.builder(
-//               itemCount: infoList.length,
-//               itemBuilder: (context, i) {
-//                 return card02(infolist: infoList, index: i);
-//               },
-//             ),
-//           ),

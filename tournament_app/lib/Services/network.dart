@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:tournament_app/Models/adminUser.dart';
 import 'package:tournament_app/Models/pubgUser.dart';
@@ -78,4 +79,30 @@ Future<List<Tournament>> getTournament() async {
       return AdminUser.fromJson(decodedata);
     }
     return throw Exception('Error with Sign In');
+  }
+
+
+    Future<void> postTournament(context, String title, String roomid, String roomPass, String map, String type, TimeOfDay time, DateTime date, String id,) async
+  {
+    String url = '$baseUrl/tournaments';
+    var body = {
+      'title': title,
+      'roomId': roomid,
+      'roomPass': roomPass,
+      'joined': 0,
+      'mapType': map,
+      'type': type,
+      'time': time.format(context),
+      'date': date.toString().split(' ')[0],
+      'createdBy': id
+    };
+    var header = {
+      'Content-Type': 'application/json; charset=UTF-8'
+    };
+    http.Response res = await http.post(url, headers: header, body: json.encode(body));
+    Map decodedBody = json.decode(res.body);
+    if(res.statusCode == 201 && decodedBody != null)
+    {
+      return Tournament.fromJson(decodedBody);
+    }
   }
