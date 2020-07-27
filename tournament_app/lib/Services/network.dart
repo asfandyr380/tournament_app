@@ -40,12 +40,13 @@ Future<User> saveUser({String text}) async {
   http.Response res =
       await http.post(url, headers: header, body: json.encode(body));
   Map decodedata = json.decode(res.body);
-  if(decodedata != null)
+  print(decodedata);
+  if(res.statusCode == 200)
   { 
     save('user', decodedata['Username']);
     save('id', decodedata['_id']);
     return User.formJson(decodedata);
-  } 
+  }
   return null;
 }
 
@@ -78,7 +79,7 @@ Future<List<Tournament>> getTournament() async {
       save('adminId', decodedata['_id']);
       return AdminUser.fromJson(decodedata);
     }
-    return throw Exception('Error with Sign In');
+    return null;
   }
 
 
@@ -104,5 +105,7 @@ Future<List<Tournament>> getTournament() async {
     if(res.statusCode == 201 && decodedBody != null)
     {
       return Tournament.fromJson(decodedBody);
+    }else {
+      return null;
     }
   }

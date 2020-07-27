@@ -14,6 +14,7 @@ class _AdminPanalState extends State<AdminPanal> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passController = TextEditingController();
   bool isNotEmpty = false;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +27,7 @@ class _AdminPanalState extends State<AdminPanal> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                isLoading ? CircularProgressIndicator(): Container(),
                 Container(
                   margin: EdgeInsets.only(bottom: 20),
                   child: Text(
@@ -70,15 +72,21 @@ class _AdminPanalState extends State<AdminPanal> {
                   color: buttonColor,
                   lable: 'Sign In',
                   onPressed: () async {
-                    await signInUser(
-                            usernameController.text, passController.text)
-                        .whenComplete(() => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => AdminHome())));
                     setState(() {
-                      isNotEmpty = true;
+                      isLoading = true;
                     });
+                    if (await signInUser(usernameController.text, passController.text) != null) {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => AdminHome()));
+                      setState(() {
+                        isNotEmpty = true;
+                      });
+                    }else {
+                      SnackBar(content: Text('Error Sign In'));
+                      setState(() {
+                        isLoading = false;
+                      });
+                    }
                   },
                 ),
               ],

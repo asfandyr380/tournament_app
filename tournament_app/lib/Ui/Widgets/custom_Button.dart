@@ -19,9 +19,11 @@ class CustomButton extends StatelessWidget {
         height: height != null ? height: 28,
         padding: EdgeInsets.only(left: 30),
         margin: margin,
-        child: Text(
-          lable,
-          style: TextStyle(fontSize: 23),
+        child: Center(
+          child: Text(
+            lable,
+            style: TextStyle(fontSize: 23),
+          ),
         ),
         decoration: BoxDecoration(
             color: color,

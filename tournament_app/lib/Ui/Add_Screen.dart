@@ -1,12 +1,8 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:tournament_app/Models/tournament_model.dart';
 import 'package:tournament_app/Services/network.dart';
 import 'package:tournament_app/Services/storage.dart';
 import 'package:tournament_app/Ui/Widgets/custom_Button.dart';
 import 'package:tournament_app/const.dart';
-import 'package:http/http.dart' as http;
-
 
 class AddScreen extends StatefulWidget {
   @override
@@ -14,7 +10,6 @@ class AddScreen extends StatefulWidget {
 }
 
 class _AddScreenState extends State<AddScreen> {
-
   String username;
   String id;
 
@@ -43,22 +38,6 @@ class _AddScreenState extends State<AddScreen> {
     }
   }
 
-
-   @override
-  void initState() {
-    super.initState();
-    read('admin').then((value) {
-      setState(() {
-        username = value;
-      });
-    });
-    read('adminId').then((value) {
-       setState(() {
-        id = value;
-      });
-    });
-  }
-
   Future<void> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
@@ -69,6 +48,21 @@ class _AddScreenState extends State<AddScreen> {
       setState(() {
         selectedDate = picked;
       });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    read('admin').then((value) {
+      setState(() {
+        username = value;
+      });
+    });
+    read('adminId').then((value) {
+      setState(() {
+        id = value;
+      });
+    });
   }
 
   @override
@@ -229,13 +223,24 @@ class _AddScreenState extends State<AddScreen> {
                   CustomButton(
                     onPressed: () {
                       if (_formKey.currentState.validate()) {
-                        postTournament(
-                          context, titleController.text, idController.text, passController.text, mapController.text, typeController.text,
-                          _selectedTime, selectedDate, id
-                        ).whenComplete(() => Navigator.pop(context, true));
-                        setState(() {
-                          isNotEmpty = true;
-                        });
+                        if (postTournament(
+                                context,
+                                titleController.text,
+                                idController.text,
+                                passController.text,
+                                mapController.text,
+                                typeController.text,
+                                _selectedTime,
+                                selectedDate,
+                                id) !=
+                            null) {
+                          Navigator.pop(context, true);
+                          setState(() {
+                            isNotEmpty = true;
+                          });
+                        }else {
+                          SnackBar(content: Text('Network Problem'));
+                        }
                       }
                     },
                     margin: EdgeInsets.only(top: 20),

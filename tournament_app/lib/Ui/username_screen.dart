@@ -5,7 +5,6 @@ import 'package:tournament_app/const.dart';
 import 'Widgets/custom_Button.dart';
 import 'home.dart';
 
-
 final TextEditingController _controller = TextEditingController();
 
 class UsernameScreen extends StatefulWidget {
@@ -17,7 +16,8 @@ final _formKey = GlobalKey<FormState>();
 
 class _UsernameScreenState extends State<UsernameScreen> {
   bool isNotEmpty = false;
- 
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,6 +28,7 @@ class _UsernameScreenState extends State<UsernameScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
+            isLoading ? LinearProgressIndicator() : Container(),
             Container(
               child: Text(
                 'Tournament',
@@ -53,17 +54,24 @@ class _UsernameScreenState extends State<UsernameScreen> {
             CustomButton(
               color: buttonColor,
               lable: 'Save',
-              onPressed: () {
+              onPressed: () async {
                 setState(() {
                   isNotEmpty = true;
+                  isLoading = true;
                 });
                 try {
                   if (_formKey.currentState.validate()) {
-                    saveUser(text:_controller.text).whenComplete(() async {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => Home()));
-                            _controller.clear();
-                    });
+                    var notNull = await saveUser(text: _controller.text);
+                    if (notNull != null) {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Home()));
+                      _controller.clear();
+                    } else {
+                      setState(() {
+                        isLoading = false;
+                      });
+                      SnackBar(content: Text('Something is Wrong'));
+                    }
                   }
                 } catch (error) {
                   print(error);
@@ -72,8 +80,8 @@ class _UsernameScreenState extends State<UsernameScreen> {
             ),
             GestureDetector(
               onTap: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => AdminPanal()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => AdminPanal()));
               },
               child: Container(
                 child: Text('Admin Panal',

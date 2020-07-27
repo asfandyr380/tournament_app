@@ -48,7 +48,7 @@ class _AdminHomeState extends State<AdminHome> {
               roundButton(
                 context: context,
                 onPressed: () async {
-                  isAdded = await Navigator.push(context,
+                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => AddScreen()));
                 },
               ),

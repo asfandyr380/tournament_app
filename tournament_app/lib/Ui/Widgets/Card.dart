@@ -4,24 +4,21 @@ import 'package:flutter_rounded_progress_bar/rounded_progress_bar_style.dart';
 import '../../const.dart';
 import 'custom_Button.dart';
 
-class CardDesign extends StatefulWidget {
+class CardDesign extends StatelessWidget {
+
   final bool isAdmin;
   final int index;
   final List infolist;
   final Function onPressed;
   final Function buttonOnTap;
+  final Color color;
 
-  CardDesign({this.isAdmin,this.infolist, this.index, this.onPressed, this.buttonOnTap});
+  CardDesign({this.isAdmin,this.infolist, this.index, this.onPressed, this.buttonOnTap, this.color});
 
-  @override
-  _CardDesignState createState() => _CardDesignState();
-}
-
-class _CardDesignState extends State<CardDesign> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: widget.onPressed,
+      onTap: onPressed,
       child: Container(
         width: 346,
         height: 274,
@@ -33,7 +30,7 @@ class _CardDesignState extends State<CardDesign> {
         child: Column(
           children: <Widget>[
             Text(
-              widget.infolist[widget.index].title,
+              infolist[index].title,
               style: TextStyle(fontSize: 57),
             ),
             Row(
@@ -56,7 +53,7 @@ class _CardDesignState extends State<CardDesign> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 Text(
-                  widget.infolist[widget.index].date,
+                  infolist[index].date,
                   style: TextStyle(
                     fontSize: 16,
                   ),
@@ -65,7 +62,7 @@ class _CardDesignState extends State<CardDesign> {
                   width: 30,
                 ),
                 Text(
-                  widget.infolist[widget.index].time,
+                  infolist[index].time,
                   style: TextStyle(
                     fontSize: 16,
                   ),
@@ -99,7 +96,7 @@ class _CardDesignState extends State<CardDesign> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 Text(
-                  widget.infolist[widget.index].map,
+                  infolist[index].map,
                   style: TextStyle(
                     fontSize: 16,
                   ),
@@ -108,7 +105,7 @@ class _CardDesignState extends State<CardDesign> {
                   width: 30,
                 ),
                 Text(
-                  widget.infolist[widget.index].type,
+                  infolist[index].type,
                   style: TextStyle(
                     fontSize: 16,
                   ),
@@ -123,7 +120,7 @@ class _CardDesignState extends State<CardDesign> {
                   child: Expanded(
                     child: RoundedProgressBar(
                       childCenter: Text(
-                        '${widget.infolist[widget.index].joined}',
+                        '${infolist[index].joined}',
                         style: TextStyle(color: Colors.black),
                       ),
                       style: RoundedProgressBarStyle(
@@ -132,15 +129,15 @@ class _CardDesignState extends State<CardDesign> {
                         widthShadow: 0,
                       ),
                       height: 20,
-                      percent: widget.infolist[widget.index].joined.toDouble(),
+                      percent: infolist[index].joined.toDouble(),
                     ),
                   ),
                 ),
                 CustomButton(
-                  color: widget.isAdmin == false ? buttonColor: Colors.red,
-                  onPressed: widget.buttonOnTap,
+                  color: color,
+                  onPressed: buttonOnTap,
                   width: 100,
-                  lable: widget.isAdmin == false ? 'Join': 'Delete',
+                  lable: isAdmin == false ? 'Join': 'Delete',
                   margin: EdgeInsets.only(left: 20, top: 25),
                 ),
               ],

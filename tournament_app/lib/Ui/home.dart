@@ -69,30 +69,32 @@ class _HomeState extends State<Home> {
           future: getTournament(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
+              var data = snapshot.data;
               return Expanded(
                 child: ListView.builder(
-                    itemCount: snapshot.data.length,
+                    itemCount: data.length,
                     itemBuilder: (context, i) {
                       return CardDesign(
                         isAdmin: false,
-                        infolist: snapshot.data,
+                        infolist: data,
                         index: i,
-                        buttonOnTap: !snapshot.data[i].joinedUsers.contains(id)
+                        color: data[i].joinedUsers.contains(id) ? Colors.grey: buttonColor,
+                        buttonOnTap: !data[i].joinedUsers.contains(id)
                             ? () async {
-                                await updateJoin(snapshot.data, i, id);
-                                await saveCurrentUserid(id, snapshot.data, i);
+                                await updateJoin(data, i, id);
+                                await saveCurrentUserid(id, data, i);
                                 setState(() {});
-                                print(snapshot.data[i].joinedUsers);
+                                print(data[i].joinedUsers);
                                 print(id);
                               }
                             : null,
-                        onPressed: snapshot.data[i].joinedUsers.contains(id)
+                        onPressed: data[i].joinedUsers.contains(id)
                             ? () {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => DetailsScreen(
-                                      tournamentinfo: snapshot.data[i],
+                                      tournamentinfo: data[i],
                                     ),
                                   ),
                                 );
