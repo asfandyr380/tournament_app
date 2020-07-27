@@ -80,6 +80,7 @@ class _AdminPanalState extends State<AdminPanal> {
                           MaterialPageRoute(builder: (context) => AdminHome()));
                       setState(() {
                         isNotEmpty = true;
+                        isLoading = false;
                       });
                     }else {
                       SnackBar(content: Text('Error Sign In'));

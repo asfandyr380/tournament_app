@@ -73,7 +73,7 @@ class _AddScreenState extends State<AddScreen> {
         children: [
           Center(
             child: Form(
-              autovalidate: true,
+              autovalidate: isNotEmpty,
               key: _formKey,
               child: Column(
                 children: <Widget>[
@@ -88,7 +88,7 @@ class _AddScreenState extends State<AddScreen> {
                   Container(
                     margin: EdgeInsets.only(left: 20, right: 20, top: 10),
                     child: TextFormField(
-                      autovalidate: isNotEmpty,
+                      
                       validator: (value) {
                         if (value.isEmpty) {
                           return 'Please Enter a title';
@@ -109,7 +109,7 @@ class _AddScreenState extends State<AddScreen> {
                           top: 10,
                         ),
                         child: TextFormField(
-                          autovalidate: isNotEmpty,
+                          
                           validator: (value) {
                             if (value.isEmpty) {
                               return 'Please Enter a Room ID';
@@ -127,7 +127,7 @@ class _AddScreenState extends State<AddScreen> {
                           top: 10,
                         ),
                         child: TextFormField(
-                          autovalidate: isNotEmpty,
+                          
                           validator: (value) {
                             if (value.isEmpty) {
                               return 'Please Enter a Password';
@@ -150,7 +150,7 @@ class _AddScreenState extends State<AddScreen> {
                           top: 10,
                         ),
                         child: TextFormField(
-                          autovalidate: isNotEmpty,
+                          
                           validator: (value) {
                             if (value.isEmpty) {
                               return 'Enter the Map Name';
@@ -168,7 +168,7 @@ class _AddScreenState extends State<AddScreen> {
                           top: 10,
                         ),
                         child: TextFormField(
-                          autovalidate: isNotEmpty,
+                          
                           validator: (value) {
                             if (value.isEmpty) {
                               return 'Please Enter Type';
@@ -221,9 +221,10 @@ class _AddScreenState extends State<AddScreen> {
                     ],
                   ),
                   CustomButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState.validate()) {
-                        if (postTournament(
+                        FocusScope.of(context).unfocus();
+                        if (await postTournament(
                                 context,
                                 titleController.text,
                                 idController.text,

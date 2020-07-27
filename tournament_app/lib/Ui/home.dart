@@ -79,7 +79,7 @@ class _HomeState extends State<Home> {
                         infolist: data,
                         index: i,
                         color: data[i].joinedUsers.contains(id) ? Colors.grey: buttonColor,
-                        buttonOnTap: !data[i].joinedUsers.contains(id)
+                        buttonOnTap: !data[i].joinedUsers.contains(id) && data[i].joined < 100
                             ? () async {
                                 await updateJoin(data, i, id);
                                 await saveCurrentUserid(id, data, i);

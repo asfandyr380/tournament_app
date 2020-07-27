@@ -3,6 +3,7 @@ import 'package:tournament_app/Models/tournament_model.dart';
 import 'package:tournament_app/Services/network.dart';
 import 'package:tournament_app/Services/storage.dart';
 import 'package:tournament_app/Ui/Add_Screen.dart';
+import 'package:tournament_app/Ui/username_screen.dart';
 import 'package:tournament_app/const.dart';
 import 'Widgets/card02.dart';
 import 'Widgets/roundButton.dart';
@@ -13,8 +14,6 @@ class AdminHome extends StatefulWidget {
 }
 
 class _AdminHomeState extends State<AdminHome> {
-
-  bool isAdded;
   String id;
 
   @override
@@ -26,7 +25,6 @@ class _AdminHomeState extends State<AdminHome> {
       });
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -48,9 +46,29 @@ class _AdminHomeState extends State<AdminHome> {
               roundButton(
                 context: context,
                 onPressed: () async {
-                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => AddScreen()));
+                  Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => AddScreen()))
+                      .then((value) => {
+                            if (value) {setState(() {})}
+                          });
                 },
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 50),
+                child: IconButton(
+                    icon: Icon(
+                      Icons.close,
+                      size: 50,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      remove('admin');
+                      remove('adminId');
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => UsernameScreen()));
+                    }),
               ),
             ],
           ),
@@ -59,15 +77,14 @@ class _AdminHomeState extends State<AdminHome> {
             builder: (context, snapshot) {
               return Expanded(
                 child: ListView.builder(
-                  itemCount: snapshot.data.length,
-                  itemBuilder: (context, i) {
-                    if(snapshot.hasData && snapshot.data[i].createdBy == id)
-                    {
-                      return card02(infolist: snapshot.data, index: i);
-                    }
-                    return Container();
-                  }
-                ),
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (context, i) {
+                      if (snapshot.hasData &&
+                          snapshot.data[i].createdBy == id) {
+                        return card02(infolist: snapshot.data, index: i);
+                      }
+                      return Container();
+                    }),
               );
             },
           ),

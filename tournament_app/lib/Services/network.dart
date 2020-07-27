@@ -83,7 +83,7 @@ Future<List<Tournament>> getTournament() async {
   }
 
 
-    Future<void> postTournament(context, String title, String roomid, String roomPass, String map, String type, TimeOfDay time, DateTime date, String id,) async
+    Future<Tournament> postTournament(context, String title, String roomid, String roomPass, String map, String type, TimeOfDay time, DateTime date, String id,) async
   {
     String url = '$baseUrl/tournaments';
     var body = {

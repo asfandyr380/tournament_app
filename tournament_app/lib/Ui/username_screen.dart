@@ -12,11 +12,17 @@ class UsernameScreen extends StatefulWidget {
   _UsernameScreenState createState() => _UsernameScreenState();
 }
 
-final _formKey = GlobalKey<FormState>();
 
 class _UsernameScreenState extends State<UsernameScreen> {
+  final _formKey = GlobalKey<FormState>();
   bool isNotEmpty = false;
   bool isLoading = false;
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,11 +30,15 @@ class _UsernameScreenState extends State<UsernameScreen> {
       backgroundColor: backgorundColor,
       body: Form(
         key: _formKey,
-        autovalidate: true,
+        autovalidate: isNotEmpty,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            isLoading ? LinearProgressIndicator() : Container(),
+            isLoading
+                ? Container(
+                    margin: EdgeInsets.only(bottom: 20),
+                    child: LinearProgressIndicator())
+                : Container(),
             Container(
               child: Text(
                 'Tournament',
@@ -41,7 +51,6 @@ class _UsernameScreenState extends State<UsernameScreen> {
               margin: EdgeInsets.only(left: 10, right: 10),
               child: TextFormField(
                 controller: _controller,
-                autovalidate: isNotEmpty,
                 validator: (value) {
                   if (value.isEmpty) {
                     return 'Please Enter Username';
@@ -55,22 +64,23 @@ class _UsernameScreenState extends State<UsernameScreen> {
               color: buttonColor,
               lable: 'Save',
               onPressed: () async {
-                setState(() {
-                  isNotEmpty = true;
-                  isLoading = true;
-                });
                 try {
+                  FocusScope.of(context).unfocus(); 
                   if (_formKey.currentState.validate()) {
+                    setState(() {
+                        isLoading = true;
+                      });
                     var notNull = await saveUser(text: _controller.text);
-                    if (notNull != null) {
+                    if (notNull != null) {                    
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) => Home()));
                       _controller.clear();
                     } else {
                       setState(() {
                         isLoading = false;
+                        isNotEmpty = true;
                       });
-                      SnackBar(content: Text('Something is Wrong'));
+                      Scaffold.of(context).showSnackBar(SnackBar(content: Text('Server Error'),));
                     }
                   }
                 } catch (error) {
