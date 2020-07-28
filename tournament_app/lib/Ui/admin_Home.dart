@@ -31,7 +31,7 @@ class _AdminHomeState extends State<AdminHome> {
     return Scaffold(
       backgroundColor: backgorundColor,
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Stack(
             children: <Widget>[
@@ -54,10 +54,10 @@ class _AdminHomeState extends State<AdminHome> {
                 },
               ),
               Container(
-                margin: EdgeInsets.only(top: 50),
+                margin: EdgeInsets.only(top: 20),
                 child: IconButton(
                     icon: Icon(
-                      Icons.close,
+                      Icons.menu,
                       size: 50,
                       color: Colors.white,
                     ),
@@ -75,17 +75,24 @@ class _AdminHomeState extends State<AdminHome> {
           FutureBuilder<List<Tournament>>(
             future: getTournament(),
             builder: (context, snapshot) {
-              return Expanded(
-                child: ListView.builder(
-                    itemCount: snapshot.data.length,
-                    itemBuilder: (context, i) {
-                      if (snapshot.hasData &&
-                          snapshot.data[i].createdBy == id) {
-                        return card02(infolist: snapshot.data, index: i);
-                      }
-                      return Container();
-                    }),
-              );
+              if (snapshot.connectionState == ConnectionState.done) {
+                if (snapshot.hasError) {
+                  return Center(child: Text(snapshot.error));
+                } else if(snapshot.hasData) {
+                  return Expanded(
+                    child: ListView.builder(
+                        itemCount: snapshot.data.length,
+                        itemBuilder: (context, i) {
+                          if (snapshot.hasData &&
+                              snapshot.data[i].createdBy == id) {
+                            return card02(infolist: snapshot.data, index: i);
+                          }
+                          return Container();
+                        }),
+                  );
+                }
+              }
+              return Center(child: CircularProgressIndicator());
             },
           ),
         ],

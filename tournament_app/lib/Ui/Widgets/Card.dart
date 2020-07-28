@@ -117,20 +117,18 @@ class CardDesign extends StatelessWidget {
                 Container(
                   width: 250,
                   margin: EdgeInsets.only(top: 30, left: 10),
-                  child: Expanded(
-                    child: RoundedProgressBar(
-                      childCenter: Text(
-                        '${infolist[index].joined}',
-                        style: TextStyle(color: Colors.black),
-                      ),
-                      style: RoundedProgressBarStyle(
-                        colorProgress: buttonColor,
-                        borderWidth: 0,
-                        widthShadow: 0,
-                      ),
-                      height: 20,
-                      percent: infolist[index].joined.toDouble(),
+                  child: RoundedProgressBar(
+                    childCenter: Text(
+                      '${infolist[index].joined}',
+                      style: TextStyle(color: Colors.black),
                     ),
+                    style: RoundedProgressBarStyle(
+                      colorProgress: buttonColor,
+                      borderWidth: 0,
+                      widthShadow: 0,
+                    ),
+                    height: 20,
+                    percent: infolist[index].joined.toDouble(),
                   ),
                 ),
                 CustomButton(
