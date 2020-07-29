@@ -78,17 +78,22 @@ class _AdminHomeState extends State<AdminHome> {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasError) {
                   return Center(child: Text(snapshot.error));
-                } else if(snapshot.hasData) {
+                } else if (snapshot.hasData) {
                   return Expanded(
-                    child: ListView.builder(
-                        itemCount: snapshot.data.length,
-                        itemBuilder: (context, i) {
-                          if (snapshot.hasData &&
-                              snapshot.data[i].createdBy == id) {
-                            return card02(infolist: snapshot.data, index: i);
-                          }
-                          return Container();
-                        }),
+                    child: RefreshIndicator(
+                      onRefresh: () async {
+                        setState(() {});
+                      },
+                      child: ListView.builder(
+                          itemCount: snapshot.data.length,
+                          itemBuilder: (context, i) {
+                            if (snapshot.hasData &&
+                                snapshot.data[i].createdBy == id) {
+                              return card02(infolist: snapshot.data, index: i);
+                            }
+                            return Container();
+                          }),
+                    ),
                   );
                 }
               }

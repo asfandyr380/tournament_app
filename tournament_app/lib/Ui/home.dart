@@ -60,57 +60,68 @@ class _HomeState extends State<Home> {
                 Container(
                   margin: EdgeInsets.only(top: 50, left: 80),
                   child: Text(
-                    username == null ? '': username,
+                    username == null ? '' : username,
                     style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                   ),
                 ),
               ],
             ),
-            FutureBuilder<List<Tournament>> (
+            FutureBuilder<List<Tournament>>(
               future: getTournament(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.none) {
-                  return Center(child: Text('No Tournaments are Available'),);
+                  return Center(
+                    child: Text('No Tournaments are Available'),
+                  );
                 } else if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.hasError) {
-                    return Center(child: Text(snapshot.error),);
-                  } else if(snapshot.hasData){
+                    return Center(
+                      child: Text(snapshot.error),
+                    );
+                  } else if (snapshot.hasData) {
                     var data = snapshot.data;
                     return Expanded(
-                      child: ListView.builder(
-                          itemCount: data.length,
-                          itemBuilder: (context, i) {
-                            return CardDesign(
-                              isAdmin: false,
-                              infolist: data,
-                              index: i,
-                              color: data[i].joinedUsers.contains(id)
-                                  ? Colors.grey
-                                  : buttonColor,
-                              buttonOnTap: !data[i].joinedUsers.contains(id) &&
-                                      data[i].joined < 100
-                                  ? () async {
-                                      await updateJoin(data, i, id);
-                                      await saveCurrentUserid(id, data, i);
-                                      setState(() {});
-                                      print(data[i].joinedUsers);
-                                      print(id);
-                                    }
-                                  : null,
-                              onPressed: data[i].joinedUsers.contains(id)
-                                  ? () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => DetailsScreen(
-                                            tournamentinfo: data[i],
+                      child: RefreshIndicator(
+                        onRefresh: () async {
+                          setState(() {});
+                        },
+                        child: ListView.builder(
+                            itemCount: data.length,
+                            itemBuilder: (context, i) {
+                              return CardDesign(
+                                isAdmin: false,
+                                infolist: data,
+                                index: i,
+                                color: data[i].joinedUsers.contains(id)
+                                    ? Colors.grey
+                                    : buttonColor,
+                                buttonOnTap: !data[i]
+                                            .joinedUsers
+                                            .contains(id) &&
+                                        data[i].joined < 100
+                                    ? () async {
+                                        await updateJoin(data, i, id);
+                                        await saveCurrentUserid(id, data, i);
+                                        setState(() {});
+                                        print(data[i].joinedUsers);
+                                        print(id);
+                                      }
+                                    : null,
+                                onPressed: data[i].joinedUsers.contains(id)
+                                    ? () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => DetailsScreen(
+                                              tournamentinfo: data[i],
+                                            ),
                                           ),
-                                        ),
-                                      );
-                                    }
-                                  : null,
-                            );
-                          }),
+                                        );
+                                      }
+                                    : null,
+                              );
+                            }),
+                      ),
                     );
                   }
                 }
