@@ -46,10 +46,11 @@ class Tournament {
 
 class UserIds {
   String userId;
-
-  UserIds({this.userId});
+  String username;
+  UserIds({this.userId, this.username});
 
   factory UserIds.fromJson(Map<String, dynamic> parsedJson) {
-    return UserIds(userId: parsedJson['\$oid']);
+    return UserIds(userId: parsedJson['\$oid'],
+    username: parsedJson['Username']);
   }
 }

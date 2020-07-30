@@ -7,6 +7,7 @@ import 'package:tournament_app/Ui/username_screen.dart';
 import 'package:tournament_app/const.dart';
 import 'Widgets/card02.dart';
 import 'Widgets/roundButton.dart';
+import 'admindetails_Screen.dart';
 
 class AdminHome extends StatefulWidget {
   @override
@@ -89,7 +90,12 @@ class _AdminHomeState extends State<AdminHome> {
                           itemBuilder: (context, i) {
                             if (snapshot.hasData &&
                                 snapshot.data[i].createdBy == id) {
-                              return card02(infolist: snapshot.data, index: i);
+                              return card02(infolist: snapshot.data, index: i,
+                              onPressed: (){
+                                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                  return AdminDetailScreen(indexInfo: snapshot.data[i],);
+                                }));
+                              });
                             }
                             return Container();
                           }),

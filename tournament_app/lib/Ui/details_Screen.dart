@@ -3,9 +3,9 @@ import 'package:tournament_app/Models/tournament_model.dart';
 import 'package:tournament_app/const.dart';
 import 'Widgets/label_text.dart';
 import 'Widgets/tile.dart';
+import 'package:tournament_app/Services/network.dart';
 
 class DetailsScreen extends StatelessWidget {
-
   final Tournament tournamentinfo;
 
   DetailsScreen({this.tournamentinfo});
@@ -49,12 +49,22 @@ class DetailsScreen extends StatelessWidget {
               style: TextStyle(fontSize: 25),
             ),
           ),
-          Expanded(child: ListView.builder(itemBuilder: (context, i) {
-            // TODO: Show name of the Joined Users Here
-          })),
+          FutureBuilder<List<UserIds>>(
+              future: getJoinedUsers(tournamentinfo.id),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Expanded(
+                    child: ListView.builder(
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (context, i) {
+                      return Center(child: Text(snapshot.data[i].username));
+                    }),
+                  );
+                } return CircularProgressIndicator();
+              },
+              ),
         ],
       ),
     );
   }
 }
-

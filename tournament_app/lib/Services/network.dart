@@ -43,12 +43,11 @@ Future<User> saveUser({String text}) async {
       await http.post(url, headers: header, body: json.encode(body));
   Map decodedata = json.decode(res.body);
   print(decodedata);
-  if (res.statusCode == 200) {
+  if (res.statusCode == 200 || res.statusCode == 201) {
     save('user', decodedata['Username']);
     save('id', decodedata['_id']);
     return User.formJson(decodedata);
-  }
-  return null;
+  } else if (res.statusCode == 400) return null;
 }
 
 Future<List<Tournament>> getTournament() async {
@@ -80,7 +79,8 @@ Future<AdminUser> signInUser(String username, String pass) async {
     save('admin', decodedata['username']);
     save('adminId', decodedata['_id']);
     return AdminUser.fromJson(decodedata);
-  } else return null;
+  } else if(res.statusCode == 400)
+    return null;
 }
 
 Future<Tournament> postTournament(
@@ -116,3 +116,12 @@ Future<Tournament> postTournament(
     return null;
   }
 }
+
+  Future<List<UserIds>> getJoinedUsers(String id) async {
+    String url = '$baseUrl/tournaments/joined/$id';
+    http.Response res = await http.get(url);
+    var decodedata = json.decode(res.body).cast<Map<String, dynamic>>();
+    if (res.statusCode == 200) {
+      return decodedata.map<UserIds>((item) => UserIds.fromJson(item)).toList();
+    } else if (res.statusCode == 400) return null;
+  }
