@@ -6,6 +6,7 @@ import 'package:tournament_app/Ui/Widgets/custom_Button.dart';
 import 'package:tournament_app/const.dart';
 
 class AddScreen extends StatefulWidget {
+
   @override
   _AddScreenState createState() => _AddScreenState();
 }
@@ -21,7 +22,6 @@ class _AddScreenState extends State<AddScreen> {
   TextEditingController typeController = TextEditingController();
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
   bool isNotEmpty = false;
 
   DateTime selectedDate = DateTime.now();

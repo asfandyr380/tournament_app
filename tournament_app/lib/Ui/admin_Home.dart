@@ -90,12 +90,21 @@ class _AdminHomeState extends State<AdminHome> {
                           itemBuilder: (context, i) {
                             if (snapshot.hasData &&
                                 snapshot.data[i].createdBy == id) {
-                              return card02(infolist: snapshot.data, index: i,
-                              onPressed: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                                  return AdminDetailScreen(indexInfo: snapshot.data[i],);
-                                }));
-                              });
+                              return card02(
+                                  infolist: snapshot.data,
+                                  index: i,
+                                  onPressed: () {
+                                    Navigator.push(context,
+                                        MaterialPageRoute(builder: (context) {
+                                      return AdminDetailScreen(
+                                        indexInfo: snapshot.data[i],
+                                      );
+                                    })).then((value) {
+                                      if (value) {
+                                        setState(() {});
+                                      }
+                                    });
+                                  });
                             }
                             return Container();
                           }),

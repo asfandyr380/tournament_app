@@ -125,3 +125,10 @@ Future<Tournament> postTournament(
       return decodedata.map<UserIds>((item) => UserIds.fromJson(item)).toList();
     } else if (res.statusCode == 400) return null;
   }
+
+
+    Future delete(String id) async {
+    String url = '$baseUrl/tournaments/delete/$id';
+    var header = {'Content-Type': 'application/json; charset=UTF-8'};
+    await http.delete(url, headers: header);
+  }
