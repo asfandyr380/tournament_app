@@ -14,15 +14,15 @@ const Color adminHomeContainerColor = Color(0xff6C9092);
 // TextField Input Decoractions
 final InputDecoration inputDecoration = InputDecoration(
   errorBorder: OutlineInputBorder(
-    borderRadius: BorderRadius.circular(44),
+    borderRadius: BorderRadius.circular(10),
     borderSide: BorderSide(color: Colors.red, width: 2),
   ),
   enabledBorder: OutlineInputBorder(
-    borderRadius: BorderRadius.circular(44),
+    borderRadius: BorderRadius.circular(10),
     borderSide: BorderSide(color: Colors.white, width: 2),
   ),
   border: OutlineInputBorder(
-    borderRadius: BorderRadius.circular(44),
+    borderRadius: BorderRadius.circular(10),
   ),
   hintText: 'Enter Your PUBG Username',
   labelText: 'PUBG Username',
