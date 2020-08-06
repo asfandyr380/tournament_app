@@ -1,13 +1,9 @@
-import 'package:flutter/material.dart'; 
+import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {
-
-  CustomButton({this.onPressed, this.height, this.width, this.lable, this.margin, this.color});
+  CustomButton({this.onPressed, this.lable, this.color});
   final Function onPressed;
-  final double width;
-  final double height;
   final String lable;
-  final EdgeInsetsGeometry margin;
   final Color color;
 
   @override
@@ -15,10 +11,8 @@ class CustomButton extends StatelessWidget {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-        width: width != null ? width: 116,
-        height: height != null ? height: 28,
-        padding: EdgeInsets.only(left: 30),
-        margin: margin,
+        width: 116,
+        height: 28,
         child: Center(
           child: Text(
             lable,

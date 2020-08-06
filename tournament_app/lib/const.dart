@@ -4,12 +4,11 @@ const baseUrl = 'https://lit-sands-88957.herokuapp.com';
 
 // all The Colors Used In The Entire App
 const Color backgorundColor = Color(0xff474747);
-const Color buttonColor = Color(0xff56C6DE);
+const Color buttonColor = Color(0xff167685);
+const Color progressBarColor = Color(0xff56C6DE);
+const Color styleSheetColor = Color(0xff41CDD5);
 const Color cardColor = Color(0xff55554E);
-const Color adminContainerColor = Color(0xff6C9092);
 const Color dateTimePickerColor = Color(0xff7A4C5C);
-const Color adminPanalTextColor = Color(0xffD2F5F4);
-const Color adminHomeContainerColor = Color(0xff6C9092);
 
 // TextField Input Decoractions
 final InputDecoration inputDecoration = InputDecoration(

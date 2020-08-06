@@ -33,7 +33,7 @@ dependencies:
   flutter_rounded_progress_bar: ^0.1.2
   shared_preferences: ^0.5.7+3
   connectivity: ^0.4.9
-  flutter_svg: any
+
 
 dev_dependencies:
   flutter_test:
@@ -52,9 +52,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/images/Style.png
-    - assets/images/Style.svg
-    - assets/images/Bottom Style.png
+    - assets/anim/StyleSheet.flr
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

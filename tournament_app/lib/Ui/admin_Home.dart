@@ -3,11 +3,12 @@ import 'package:tournament_app/Models/tournament_model.dart';
 import 'package:tournament_app/Services/network.dart';
 import 'package:tournament_app/Services/storage.dart';
 import 'package:tournament_app/Ui/Add_Screen.dart';
+import 'package:tournament_app/Ui/details_Screen.dart';
 import 'package:tournament_app/Ui/username_screen.dart';
 import 'package:tournament_app/const.dart';
 import 'Widgets/card02.dart';
 import 'Widgets/roundButton.dart';
-import 'admindetails_Screen.dart';
+import 'package:http/http.dart' as http;
 
 class AdminHome extends StatefulWidget {
   @override
@@ -27,12 +28,26 @@ class _AdminHomeState extends State<AdminHome> {
     });
   }
 
+
+  Future<String> removeTournament(String id) async
+  {
+    final String url = '$baseUrl/tournaments/delete/$id';
+    http.Response res = await http.delete(url);
+    if(res.statusCode == 201)
+    {
+      return 'Success';
+    }else return 'Error';
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
+    var screenW = MediaQuery.of(context).size.width;
+    var screenH = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: backgorundColor,
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Stack(
             children: <Widget>[
@@ -42,7 +57,7 @@ class _AdminHomeState extends State<AdminHome> {
                     borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(20),
                         bottomRight: Radius.circular(20)),
-                    color: adminHomeContainerColor),
+                    color: styleSheetColor),
               ),
               roundButton(
                 context: context,
@@ -58,7 +73,7 @@ class _AdminHomeState extends State<AdminHome> {
                 margin: EdgeInsets.only(top: 20),
                 child: IconButton(
                     icon: Icon(
-                      Icons.menu,
+                      Icons.exit_to_app,
                       size: 50,
                       color: Colors.white,
                     ),
@@ -93,11 +108,20 @@ class _AdminHomeState extends State<AdminHome> {
                               return card02(
                                   infolist: snapshot.data,
                                   index: i,
+                                  width: screenW,
+                                  height: screenH,
+                                  onButtonPress: () async {
+                                    String result = await removeTournament(snapshot.data[i].id);
+                                    if(result == 'Success')
+                                    {
+                                      setState(() {});
+                                    }
+                                  },
                                   onPressed: () {
                                     Navigator.push(context,
                                         MaterialPageRoute(builder: (context) {
-                                      return AdminDetailScreen(
-                                        indexInfo: snapshot.data[i],
+                                      return DetailsScreen(
+                                        tournamentinfo: snapshot.data[i],
                                       );
                                     })).then((value) {
                                       if (value) {
@@ -112,7 +136,9 @@ class _AdminHomeState extends State<AdminHome> {
                   );
                 }
               }
-              return Center(child: CircularProgressIndicator());
+              return Container(
+                margin: EdgeInsets.only(top: 10),
+                child: Center(child: CircularProgressIndicator()));
             },
           ),
         ],

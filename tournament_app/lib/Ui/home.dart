@@ -6,6 +6,7 @@ import 'package:tournament_app/const.dart';
 import 'package:tournament_app/Models/tournament_model.dart';
 import 'Widgets/Card.dart';
 import 'details_Screen.dart';
+import 'package:http/http.dart' as http;
 
 class Home extends StatefulWidget {
   @override
@@ -32,103 +33,125 @@ class _HomeState extends State<Home> {
     });
   }
 
+  Future<String> deleteAccount(String iD) async {
+    final String url = '$baseUrl/user/delete/$iD';
+    http.Response res = await http.delete(url);
+    if (res.statusCode == 201) {
+      return 'Success';
+    } else
+      return 'Error';
+  }
+
+  void action(String choice) async {
+    if (choice == 'Delete Account') {
+      String result = await deleteAccount(id);
+      if (result == 'Success') {
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          remove('user');
+          return UsernameScreen();
+        }));
+      }
+    } else {
+      Navigator.push(context, MaterialPageRoute(builder: (context) {
+        remove('user');
+        return UsernameScreen();
+      }));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backgorundColor,
-      body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.only(top: 40),
-                  child: IconButton(
-                      icon: Icon(
-                        Icons.menu,
-                        color: Colors.white,
-                        size: 50,
-                      ),
-                      onPressed: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          remove('user');
-                          return UsernameScreen();
-                        }));
-                      }),
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 50, left: 80),
-                  child: Text(
-                    username == null ? '' : username,
-                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Text('Touranament'),
+        centerTitle: true,
+        actions: <Widget>[
+          PopupMenuButton<String>(
+              onSelected: action,
+              itemBuilder: (context) {
+                return DotMenu.choices.map((String c) {
+                  return PopupMenuItem<String>(value: c, child: Text(c));
+                }).toList();
+              }),
+        ],
+      ),
+      body: Column(children: <Widget>[
+        Container(
+          margin: EdgeInsets.only(top: 10),
+          child: Text(
+            username == null ? '' : username,
+            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+          ),
+        ),
+        FutureBuilder<List<Tournament>>(
+          future: getTournament(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.none) {
+              return Center(
+                child: Text('No Tournaments are Available'),
+              );
+            } else if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasError) {
+                return Center(
+                  child: Text(snapshot.error),
+                );
+              } else if (snapshot.hasData) {
+                var data = snapshot.data;
+                return Expanded(
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      setState(() {});
+                    },
+                    child: ListView.builder(
+                        itemCount: data.length,
+                        itemBuilder: (context, i) {
+                          return CardDesign(
+                            infolist: data,
+                            index: i,
+                            color: data[i].joinedUsers.contains(id)
+                                ? Colors.grey
+                                : buttonColor,
+                            buttonOnTap: !data[i].joinedUsers.contains(id) &&
+                                    data[i].joined < 100
+                                ? () async {
+                                    await updateJoin(data, i, id);
+                                    await saveCurrentUserid(id, data, i);
+                                    setState(() {});
+                                    print(data[i].joinedUsers);
+                                    print(id);
+                                  }
+                                : null,
+                            onPressed: data[i].joinedUsers.contains(id)
+                                ? () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => DetailsScreen(
+                                          tournamentinfo: data[i],
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                : null,
+                          );
+                        }),
                   ),
-                ),
-              ],
-            ),
-            FutureBuilder<List<Tournament>>(
-              future: getTournament(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.none) {
-                  return Center(
-                    child: Text('No Tournaments are Available'),
-                  );
-                } else if (snapshot.connectionState == ConnectionState.done) {
-                  if (snapshot.hasError) {
-                    return Center(
-                      child: Text(snapshot.error),
-                    );
-                  } else if (snapshot.hasData) {
-                    var data = snapshot.data;
-                    return Expanded(
-                      child: RefreshIndicator(
-                        onRefresh: () async {
-                          setState(() {});
-                        },
-                        child: ListView.builder(
-                            itemCount: data.length,
-                            itemBuilder: (context, i) {
-                              return CardDesign(
-                                isAdmin: false,
-                                infolist: data,
-                                index: i,
-                                color: data[i].joinedUsers.contains(id)
-                                    ? Colors.grey
-                                    : buttonColor,
-                                buttonOnTap: !data[i]
-                                            .joinedUsers
-                                            .contains(id) &&
-                                        data[i].joined < 100
-                                    ? () async {
-                                        await updateJoin(data, i, id);
-                                        await saveCurrentUserid(id, data, i);
-                                        setState(() {});
-                                        print(data[i].joinedUsers);
-                                        print(id);
-                                      }
-                                    : null,
-                                onPressed: data[i].joinedUsers.contains(id)
-                                    ? () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => DetailsScreen(
-                                              tournamentinfo: data[i],
-                                            ),
-                                          ),
-                                        );
-                                      }
-                                    : null,
-                              );
-                            }),
-                      ),
-                    );
-                  }
-                }
-                return CircularProgressIndicator();
-              },
-            ),
-          ]),
+                );
+              }
+            }
+            return CircularProgressIndicator();
+          },
+        ),
+      ]),
     );
   }
+}
+
+class DotMenu {
+  static const String delete = 'Delete Account';
+  static const String signOut = 'Sign Out';
+
+  static const List<String> choices = [delete, signOut];
 }

@@ -107,7 +107,7 @@ class _AddScreenState extends State<AddScreen> {
                         Container(
                           width: 150,
                           margin: EdgeInsets.only(
-                            top: 10,
+                            top: 20,
                           ),
                           child: TextFormField(
                             validator: (value) {
@@ -124,7 +124,7 @@ class _AddScreenState extends State<AddScreen> {
                         Container(
                           width: 150,
                           margin: EdgeInsets.only(
-                            top: 10,
+                            top: 20,
                           ),
                           child: TextFormField(
                             validator: (value) {
@@ -146,7 +146,7 @@ class _AddScreenState extends State<AddScreen> {
                         Container(
                           width: 150,
                           margin: EdgeInsets.only(
-                            top: 10,
+                            top: 20,
                           ),
                           child: TextFormField(
                             validator: (value) {
@@ -163,7 +163,7 @@ class _AddScreenState extends State<AddScreen> {
                         Container(
                           width: 150,
                           margin: EdgeInsets.only(
-                            top: 10,
+                            top: 20,
                           ),
                           child: TextFormField(
                             validator: (value) {
@@ -218,34 +218,36 @@ class _AddScreenState extends State<AddScreen> {
                         ),
                       ],
                     ),
-                    CustomButton(
-                      onPressed: () async {
-                        if (_formKey.currentState.validate()) {
-                          FocusScope.of(context).unfocus();
-                          if (await checkConnectivity(
-                              context)) if (await postTournament(
-                                  context,
-                                  titleController.text,
-                                  idController.text,
-                                  passController.text,
-                                  mapController.text,
-                                  typeController.text,
-                                  _selectedTime,
-                                  selectedDate,
-                                  id) !=
-                              null) {
-                            Navigator.pop(context, true);
-                            setState(() {
-                              isNotEmpty = true;
-                            });
-                          } else {
-                            SnackBar(content: Text('Network Problem'));
-                          }
-                        }
-                      },
+                    Container(
                       margin: EdgeInsets.only(top: 20),
-                      color: buttonColor,
-                      lable: 'Save',
+                      child: CustomButton(
+                        onPressed: () async {
+                          if (_formKey.currentState.validate()) {
+                            FocusScope.of(context).unfocus();
+                            if (await checkConnectivity(
+                                context)) if (await postTournament(
+                                    context,
+                                    titleController.text,
+                                    idController.text,
+                                    passController.text,
+                                    mapController.text,
+                                    typeController.text,
+                                    _selectedTime,
+                                    selectedDate,
+                                    id) !=
+                                null) {
+                              Navigator.pop(context, true);
+                              setState(() {
+                                isNotEmpty = true;
+                              });
+                            } else {
+                              SnackBar(content: Text('Network Problem'));
+                            }
+                          }
+                        },
+                        color: buttonColor,
+                        lable: 'Save',
+                      ),
                     ),
                   ],
                 ),
