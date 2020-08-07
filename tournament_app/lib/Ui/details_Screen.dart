@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_countdown_timer/countdown_timer.dart';
 import 'package:tournament_app/Models/tournament_model.dart';
+import 'package:tournament_app/Widgets/CountDownTimer.dart';
+import 'package:tournament_app/Widgets/label_text.dart';
+import 'package:tournament_app/Widgets/tile.dart';
 import 'package:tournament_app/const.dart';
-import 'Widgets/label_text.dart';
-import 'Widgets/tile.dart';
 import 'package:tournament_app/Services/network.dart';
 
 class DetailsScreen extends StatelessWidget {
   final Tournament tournamentinfo;
-
   DetailsScreen({this.tournamentinfo});
+
+  Network _network = Network();
 
   int time() {
     String date = tournamentinfo.date;
@@ -77,7 +78,7 @@ class DetailsScreen extends StatelessWidget {
               ),
             ),
             FutureBuilder<List<UserIds>>(
-              future: getJoinedUsers(tournamentinfo.id),
+              future: _network.getJoinedUsers(tournamentinfo.id),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return Expanded(
@@ -96,41 +97,4 @@ class DetailsScreen extends StatelessWidget {
       ),
     );
   }
-}
-
-Widget countDownTimer(int time) {
-  return CountdownTimer(
-      endTime: time,
-      defaultDays: "==",
-      defaultHours: "--",
-      defaultMin: "**",
-      defaultSec: "++",
-      daysSymbol: "days",
-      hoursSymbol: "hrs ",
-      minSymbol: "min ",
-      secSymbol: "sec",
-      daysTextStyle: TextStyle(
-        fontSize: 30,
-      ),
-      hoursTextStyle: TextStyle(
-        fontSize: 30,
-      ),
-      minTextStyle: TextStyle(
-        fontSize: 30,
-      ),
-      secTextStyle: TextStyle(
-        fontSize: 30,
-      ),
-      daysSymbolTextStyle: TextStyle(
-        fontSize: 20,
-      ),
-      hoursSymbolTextStyle: TextStyle(
-        fontSize: 20,
-      ),
-      minSymbolTextStyle: TextStyle(
-        fontSize: 20,
-      ),
-      secSymbolTextStyle: TextStyle(
-        fontSize: 20,
-      ));
 }

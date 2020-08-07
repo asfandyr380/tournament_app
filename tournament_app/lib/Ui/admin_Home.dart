@@ -5,10 +5,9 @@ import 'package:tournament_app/Services/storage.dart';
 import 'package:tournament_app/Ui/Add_Screen.dart';
 import 'package:tournament_app/Ui/details_Screen.dart';
 import 'package:tournament_app/Ui/username_screen.dart';
+import 'package:tournament_app/Widgets/card02.dart';
+import 'package:tournament_app/Widgets/roundButton.dart';
 import 'package:tournament_app/const.dart';
-import 'Widgets/card02.dart';
-import 'Widgets/roundButton.dart';
-import 'package:http/http.dart' as http;
 
 class AdminHome extends StatefulWidget {
   @override
@@ -16,6 +15,7 @@ class AdminHome extends StatefulWidget {
 }
 
 class _AdminHomeState extends State<AdminHome> {
+  Network _network = Network();
   String id;
 
   @override
@@ -27,19 +27,6 @@ class _AdminHomeState extends State<AdminHome> {
       });
     });
   }
-
-
-  Future<String> removeTournament(String id) async
-  {
-    final String url = '$baseUrl/tournaments/delete/$id';
-    http.Response res = await http.delete(url);
-    if(res.statusCode == 201)
-    {
-      return 'Success';
-    }else return 'Error';
-  }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -64,9 +51,14 @@ class _AdminHomeState extends State<AdminHome> {
                 onPressed: () async {
                   Navigator.push(context,
                           MaterialPageRoute(builder: (context) => AddScreen()))
-                      .then((value) => {
-                            if (value) {setState(() {})}
-                          });
+                      .then(
+                    (value) => {
+                      if (value)
+                        {
+                          setState(() {}),
+                        }
+                    },
+                  );
                 },
               ),
               Container(
@@ -89,7 +81,7 @@ class _AdminHomeState extends State<AdminHome> {
             ],
           ),
           FutureBuilder<List<Tournament>>(
-            future: getTournament(),
+            future: _network.getTournament(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasError) {
@@ -111,9 +103,9 @@ class _AdminHomeState extends State<AdminHome> {
                                   width: screenW,
                                   height: screenH,
                                   onButtonPress: () async {
-                                    String result = await removeTournament(snapshot.data[i].id);
-                                    if(result == 'Success')
-                                    {
+                                    String result = await _network.removeTournament(
+                                        snapshot.data[i].id);
+                                    if (result == 'Success') {
                                       setState(() {});
                                     }
                                   },
@@ -137,8 +129,8 @@ class _AdminHomeState extends State<AdminHome> {
                 }
               }
               return Container(
-                margin: EdgeInsets.only(top: 10),
-                child: Center(child: CircularProgressIndicator()));
+                  margin: EdgeInsets.only(top: 10),
+                  child: Center(child: CircularProgressIndicator()));
             },
           ),
         ],

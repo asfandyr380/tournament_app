@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:tournament_app/Services/connectivity.dart';
 import 'package:tournament_app/Services/network.dart';
-import 'package:tournament_app/Ui/Widgets/toast.dart';
 import 'package:tournament_app/Ui/admin_Home.dart';
-import 'package:tournament_app/Ui/username_screen.dart';
+import 'package:tournament_app/Widgets/Style.dart';
+import 'package:tournament_app/Widgets/custom_Button.dart';
+import 'package:tournament_app/Widgets/toast.dart';
 import 'package:tournament_app/const.dart';
-import 'Widgets/custom_Button.dart';
+
 
 class AdminPanal extends StatefulWidget {
   @override
@@ -16,8 +17,17 @@ class _AdminPanalState extends State<AdminPanal> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passController = TextEditingController();
+  Network _network = Network();
   bool isNotEmpty = false;
   bool isLoading = false;
+
+
+    @override
+  void dispose() {
+    super.dispose();
+    usernameController.dispose();
+    passController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +107,7 @@ class _AdminPanalState extends State<AdminPanal> {
                                   setState(() {
                                     isLoading = true;
                                   });
-                                if (await signInUser(usernameController.text,
+                                if (await _network.signInUser(usernameController.text,
                                         passController.text) !=
                                     null) {
                                   Navigator.push(

@@ -2,28 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:tournament_app/Services/connectivity.dart';
 import 'package:tournament_app/Services/network.dart';
 import 'package:tournament_app/Services/storage.dart';
-import 'package:tournament_app/Ui/Widgets/custom_Button.dart';
+import 'package:tournament_app/Widgets/custom_Button.dart';
 import 'package:tournament_app/const.dart';
 
 class AddScreen extends StatefulWidget {
-
   @override
   _AddScreenState createState() => _AddScreenState();
 }
 
 class _AddScreenState extends State<AddScreen> {
-  String username;
-  String id;
-
   TextEditingController titleController = TextEditingController();
   TextEditingController idController = TextEditingController();
   TextEditingController passController = TextEditingController();
   TextEditingController mapController = TextEditingController();
   TextEditingController typeController = TextEditingController();
 
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool isNotEmpty = false;
+  Network _network = Network();
 
+  String username;
+  String id;
+  bool isNotEmpty = false;
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   DateTime selectedDate = DateTime.now();
   TimeOfDay _selectedTime = TimeOfDay.now();
 
@@ -64,6 +63,16 @@ class _AddScreenState extends State<AddScreen> {
         id = value;
       });
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    titleController.dispose();
+    idController.dispose();
+    passController.dispose();
+    mapController.dispose();
+    typeController.dispose();
   }
 
   @override
@@ -225,7 +234,7 @@ class _AddScreenState extends State<AddScreen> {
                           if (_formKey.currentState.validate()) {
                             FocusScope.of(context).unfocus();
                             if (await checkConnectivity(
-                                context)) if (await postTournament(
+                                context)) if (await _network.postTournament(
                                     context,
                                     titleController.text,
                                     idController.text,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+const header = {'Content-Type': 'application/json; charset=UTF-8'};
 const baseUrl = 'https://lit-sands-88957.herokuapp.com';
 
 // all The Colors Used In The Entire App

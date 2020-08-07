@@ -7,9 +7,10 @@ import 'package:tournament_app/Models/tournament_model.dart';
 import 'package:tournament_app/Services/storage.dart';
 import 'package:tournament_app/const.dart';
 
-// Update the Joined Player Count
+class Network {
+
+  // Update the Joined Player Count
 Future<void> updateJoin(List list, int index, String userId) async {
-  var header = {'Content-Type': 'application/json; charset=UTF-8'};
   var body = {
     "joined": list[index].joined += 1,
   };
@@ -20,8 +21,8 @@ Future<void> updateJoin(List list, int index, String userId) async {
   print(res.body);
 }
 
+// Save Current Sign In User Id to the Joined Player Array
 Future<void> saveCurrentUserid(String userId, List list, int index) async {
-  var header = {'Content-Type': 'application/json; charset=UTF-8'};
   var body = {
     "joinedUsers": userId,
   };
@@ -32,10 +33,9 @@ Future<void> saveCurrentUserid(String userId, List list, int index) async {
   print(res.body);
 }
 
-// Save The New User
+// Save The New User or logIn the Existing One
 Future<User> saveUser({String text}) async {
   String url = '$baseUrl/user';
-  var header = {'Content-Type': 'application/json; charset=UTF-8'};
   var body = {
     'Username': text,
   };
@@ -50,10 +50,11 @@ Future<User> saveUser({String text}) async {
   } else if (res.statusCode == 400) return null;
 }
 
+// Fetch all the available Tournaments
 Future<List<Tournament>> getTournament() async {
   try {
     String url = '$baseUrl/tournaments';
-    var res = await http.get(url);
+    var res = await http.get(url, headers: header);
     final decodedBody = json.decode(res.body).cast<Map<String, dynamic>>();
     if (res.statusCode == 200 && decodedBody != null) {
       return decodedBody
@@ -67,9 +68,9 @@ Future<List<Tournament>> getTournament() async {
   }
 }
 
+// Sign In The Admin User
 Future<AdminUser> signInUser(String username, String pass) async {
   String url = '$baseUrl/admin/logIn';
-  var header = {'Content-Type': 'application/json; charset=UTF-8'};
   var body = {'username': username, 'password': pass};
   http.Response res =
       await http.post(url, headers: header, body: json.encode(body));
@@ -83,6 +84,8 @@ Future<AdminUser> signInUser(String username, String pass) async {
     return null;
 }
 
+
+// Add a Single Tournament to the Database
 Future<Tournament> postTournament(
   context,
   String title,
@@ -106,7 +109,6 @@ Future<Tournament> postTournament(
     'date': date.toString().split(' ')[0],
     'createdBy': id
   };
-  var header = {'Content-Type': 'application/json; charset=UTF-8'};
   http.Response res =
       await http.post(url, headers: header, body: json.encode(body));
   Map decodedBody = json.decode(res.body);
@@ -117,18 +119,34 @@ Future<Tournament> postTournament(
   }
 }
 
+  // Get the List of Joined Users array
   Future<List<UserIds>> getJoinedUsers(String id) async {
     String url = '$baseUrl/tournaments/joined/$id';
-    http.Response res = await http.get(url);
+    http.Response res = await http.get(url, headers: header);
     var decodedata = json.decode(res.body).cast<Map<String, dynamic>>();
     if (res.statusCode == 200) {
       return decodedata.map<UserIds>((item) => UserIds.fromJson(item)).toList();
     } else if (res.statusCode == 400) return null;
   }
 
-
-    Future delete(String id) async {
-    String url = '$baseUrl/tournaments/delete/$id';
-    var header = {'Content-Type': 'application/json; charset=UTF-8'};
-    await http.delete(url, headers: header);
+  // Delete the user from the database
+  Future<String> deleteAccount(String iD) async {
+    final String url = '$baseUrl/user/delete/$iD';
+    http.Response res = await http.delete(url, headers: header);
+    if (res.statusCode == 201) {
+      return 'Success';
+    } else
+      return 'Error';
   }
+
+  // Delete the tournament by Id from the Database
+  Future<String> removeTournament(String id) async
+  {
+    final String url = '$baseUrl/tournaments/delete/$id';
+    http.Response res = await http.delete(url, headers: header);
+    if(res.statusCode == 201)
+    {
+      return 'Success';
+    }else return 'Error';
+  }
+}

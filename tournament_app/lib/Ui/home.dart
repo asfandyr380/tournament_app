@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:tournament_app/Models/ThreeDotMenu.dart';
 import 'package:tournament_app/Services/network.dart';
 import 'package:tournament_app/Services/storage.dart';
 import 'package:tournament_app/Ui/username_screen.dart';
+import 'package:tournament_app/Widgets/Card.dart';
 import 'package:tournament_app/const.dart';
 import 'package:tournament_app/Models/tournament_model.dart';
-import 'Widgets/Card.dart';
 import 'details_Screen.dart';
-import 'package:http/http.dart' as http;
 
 class Home extends StatefulWidget {
   @override
@@ -14,6 +14,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  Network _network = Network();
   String username;
   String id;
   bool internet;
@@ -34,18 +35,9 @@ class _HomeState extends State<Home> {
     });
   }
 
-  Future<String> deleteAccount(String iD) async {
-    final String url = '$baseUrl/user/delete/$iD';
-    http.Response res = await http.delete(url);
-    if (res.statusCode == 201) {
-      return 'Success';
-    } else
-      return 'Error';
-  }
-
   void action(String choice) async {
     if (choice == 'Delete Account') {
-      String result = await deleteAccount(id);
+      String result = await _network.deleteAccount(id);
       if (result == 'Success') {
         Navigator.push(context, MaterialPageRoute(builder: (context) {
           remove('user');
@@ -87,7 +79,7 @@ class _HomeState extends State<Home> {
           ),
         ),
         FutureBuilder<List<Tournament>>(
-          future: getTournament(),
+          future: _network.getTournament(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.none) {
               return Center(
@@ -115,15 +107,15 @@ class _HomeState extends State<Home> {
                                 ? Colors.grey
                                 : buttonColor,
                             buttonOnTap: !data[i].joinedUsers.contains(id) &&
-                                        data[i].joined < 100 &&
+                                    data[i].joined < 100 &&
                                     isTap
                                 ? () async {
                                     setState(() {
                                       isTap = false;
                                     });
-                                    await updateJoin(data, i, id);
-                                    await saveCurrentUserid(id, data, i);
-                                     setState(() {});
+                                    await _network.updateJoin(data, i, id);
+                                    await _network.saveCurrentUserid(id, data, i);
+                                    setState(() {});
                                     print(data[i].joinedUsers);
                                     print(id);
                                   }
@@ -152,11 +144,4 @@ class _HomeState extends State<Home> {
       ]),
     );
   }
-}
-
-class DotMenu {
-  static const String delete = 'Delete Account';
-  static const String signOut = 'Sign Out';
-
-  static const List<String> choices = [delete, signOut];
 }

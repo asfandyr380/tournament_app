@@ -1,5 +1,6 @@
 import 'package:connectivity/connectivity.dart';
-import 'package:tournament_app/Ui/Widgets/toast.dart';
+import 'package:tournament_app/Widgets/toast.dart';
+
 
 Future<bool> checkConnectivity(context) async {
     var result = await (Connectivity().checkConnectivity());

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rounded_progress_bar/flutter_rounded_progress_bar.dart';
 import 'package:flutter_rounded_progress_bar/rounded_progress_bar_style.dart';
-import '../../const.dart';
+import 'package:tournament_app/const.dart';
 import 'custom_Button.dart';
 
 class CardDesign extends StatelessWidget {
