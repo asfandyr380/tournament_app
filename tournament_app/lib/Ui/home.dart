@@ -17,6 +17,7 @@ class _HomeState extends State<Home> {
   String username;
   String id;
   bool internet;
+  bool isTap = true;
 
   @override
   void initState() {
@@ -114,11 +115,15 @@ class _HomeState extends State<Home> {
                                 ? Colors.grey
                                 : buttonColor,
                             buttonOnTap: !data[i].joinedUsers.contains(id) &&
-                                    data[i].joined < 100
+                                        data[i].joined < 100 &&
+                                    isTap
                                 ? () async {
+                                    setState(() {
+                                      isTap = false;
+                                    });
                                     await updateJoin(data, i, id);
                                     await saveCurrentUserid(id, data, i);
-                                    setState(() {});
+                                     setState(() {});
                                     print(data[i].joinedUsers);
                                     print(id);
                                   }
